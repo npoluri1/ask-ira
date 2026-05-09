@@ -1,0 +1,28 @@
+{
+  "mcpServers": {
+    "ask-ira-market-data": {
+      "type": "python",
+      "command": "uvicorn",
+      "args": "src.mcp_servers.registry:create_app --host 0.0.0.0 --port 8101",
+      "description": "Market data: stock prices, financials, SEC filings"
+    },
+    "ask-ira-sentiment": {
+      "type": "python",
+      "command": "uvicorn",
+      "args": "src.mcp_servers.registry:create_app --host 0.0.0.0 --port 8102",
+      "description": "Sentiment analysis: news headlines, social media sentiment"
+    },
+    "ask-ira-macro": {
+      "type": "python",
+      "command": "uvicorn",
+      "args": "src.mcp_servers.registry:create_app --host 0.0.0.0 --port 8103",
+      "description": "Macro economics: GDP, CPI, interest rates, employment"
+    },
+    "ask-ira-internal-kb": {
+      "type": "python",
+      "command": "uvicorn",
+      "args": "src.mcp_servers.registry:create_app --host 0.0.0.0 --port 8104",
+      "description": "Internal KB: investment frameworks, research methodology, ESG"
+    }
+  }
+}

@@ -1,0 +1,42 @@
+# Ask IRA Code Owners
+
+* @ask-ira/core
+
+## Core Agents
+src/agents/ @ask-ira/core
+
+## MCP Servers
+src/mcp_servers/ @ask-ira/core
+
+## RAG Pipeline
+src/rag/ @ask-ira/core
+
+## API Layer
+src/api/ @ask-ira/core
+
+## Guardrails
+src/guardrails/ @ask-ira/core @ask-ira/security
+
+## Configuration
+src/config/ @ask-ira/core
+
+## Deployment
+deployment/ @ask-ira/devops
+Dockerfile* @ask-ira/devops
+docker-compose* @ask-ira/devops
+railway.json @ask-ira/devops
+
+## CI/CD
+.github/ @ask-ira/devops
+
+## Data / Seed
+data/ @ask-ira/core
+
+## Notebooks
+notebooks/ @ask-ira/docs
+
+## Tests
+tests/ @ask-ira/core
+
+## Documentation
+*.md @ask-ira/docs

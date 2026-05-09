@@ -1,0 +1,14 @@
+{
+  "buildCommand": "pip install -e .",
+  "outputDirectory": ".",
+  "installCommand": "pip install -e \".[groq,gemini,huggingface,mistral,mcp,eval]\"",
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/api/index" }
+  ],
+  "functions": {
+    "api/index.py": {
+      "memory": 1024,
+      "maxDuration": 60
+    }
+  }
+}

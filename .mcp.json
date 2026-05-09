@@ -1,0 +1,52 @@
+{
+  "mcp_servers": {
+    "ask-ira-market-data": {
+      "command": "uvicorn",
+      "args": [
+        "src.mcp_servers.registry:create_app",
+        "--host",
+        "0.0.0.0",
+        "--port",
+        "8101"
+      ],
+      "env": {},
+      "description": "Market data MCP server: stock prices, financials, SEC filings"
+    },
+    "ask-ira-sentiment": {
+      "command": "uvicorn",
+      "args": [
+        "src.mcp_servers.registry:create_app",
+        "--host",
+        "0.0.0.0",
+        "--port",
+        "8102"
+      ],
+      "env": {},
+      "description": "Sentiment analysis MCP server: news headlines, social sentiment"
+    },
+    "ask-ira-macro": {
+      "command": "uvicorn",
+      "args": [
+        "src.mcp_servers.registry:create_app",
+        "--host",
+        "0.0.0.0",
+        "--port",
+        "8103"
+      ],
+      "env": {},
+      "description": "Macro economic MCP server: GDP, CPI, interest rates, employment"
+    },
+    "ask-ira-internal-kb": {
+      "command": "uvicorn",
+      "args": [
+        "src.mcp_servers.registry:create_app",
+        "--host",
+        "0.0.0.0",
+        "--port",
+        "8104"
+      ],
+      "env": {},
+      "description": "Internal knowledge base MCP server: investment frameworks, research methodology, ESG criteria"
+    }
+  }
+}

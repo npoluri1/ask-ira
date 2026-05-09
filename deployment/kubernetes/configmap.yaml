@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ask-ira-config
+data:
+  LOG_LEVEL: "INFO"
+  LANGSMITH_TRACING: "false"
+  CHROMA_PERSIST_DIR: "/app/data/chroma_db"
+  EMBEDDING_MODEL: "all-MiniLM-L6-v2"
+  POSTGRES_DSN: "postgresql://askira:askira_secret@postgres-service:5432/askira"

@@ -1,0 +1,35 @@
+[
+  {
+    "ticker": "AAPL",
+    "filings": [
+      {"type": "10-K", "date": "2024-10-31", "description": "Annual report for fiscal year 2024", "filing_url": "https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&CIK=AAPL&type=10-K"},
+      {"type": "10-Q", "date": "2025-01-30", "description": "Quarterly report for Q1 FY2025", "filing_url": "https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&CIK=AAPL&type=10-Q"},
+      {"type": "8-K", "date": "2025-02-15", "description": "Current report regarding executive compensation changes", "filing_url": "https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&CIK=AAPL&type=8-K"},
+      {"type": "DEF 14A", "date": "2025-03-01", "description": "Definitive proxy statement for 2025 annual shareholder meeting", "filing_url": "https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&CIK=AAPL&type=DEF+14A"}
+    ]
+  },
+  {
+    "ticker": "MSFT",
+    "filings": [
+      {"type": "10-K", "date": "2024-07-30", "description": "Annual report for fiscal year 2024", "filing_url": "https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&CIK=MSFT&type=10-K"},
+      {"type": "10-Q", "date": "2025-01-28", "description": "Quarterly report for Q2 FY2025", "filing_url": "https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&CIK=MSFT&type=10-Q"},
+      {"type": "8-K", "date": "2025-02-20", "description": "Current report regarding Azure AI services launch", "filing_url": "https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&CIK=MSFT&type=8-K"}
+    ]
+  },
+  {
+    "ticker": "GOOGL",
+    "filings": [
+      {"type": "10-K", "date": "2025-01-31", "description": "Annual report for fiscal year 2024", "filing_url": "https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&CIK=GOOGL&type=10-K"},
+      {"type": "10-Q", "date": "2025-04-25", "description": "Quarterly report for Q1 2025", "filing_url": "https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&CIK=GOOGL&type=10-Q"},
+      {"type": "8-K", "date": "2025-03-10", "description": "Current report regarding DOJ antitrust ruling", "filing_url": "https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&CIK=GOOGL&type=8-K"}
+    ]
+  },
+  {
+    "ticker": "AMZN",
+    "filings": [
+      {"type": "10-K", "date": "2025-02-05", "description": "Annual report for fiscal year 2024", "filing_url": "https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&CIK=AMZN&type=10-K"},
+      {"type": "10-Q", "date": "2025-04-30", "description": "Quarterly report for Q1 2025", "filing_url": "https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&CIK=AMZN&type=10-Q"},
+      {"type": "8-K", "date": "2025-02-12", "description": "Current report regarding AWS AI chip announcement", "filing_url": "https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&CIK=AMZN&type=8-K"}
+    ]
+  }
+]

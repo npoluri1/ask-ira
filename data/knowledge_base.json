@@ -1,0 +1,38 @@
+[
+  {
+    "id": "KB001",
+    "title": "Investment Framework Overview",
+    "topic": "investment_thesis",
+    "content": "IRA employs a three-pillar investment research framework: 1) Fundamental Analysis — evaluating financial health, competitive moats, management quality, and growth prospects using DCF, comparable company analysis, and precedent transactions. 2) Technical Indicators — analyzing price trends, volume patterns, support/resistance levels, and momentum oscillators for entry/exit timing. 3) Macro Context — assessing how interest rates, inflation, GDP growth, and geopolitical factors impact sector and company performance. All three pillars must align before a conviction rating is assigned."
+  },
+  {
+    "id": "KB002",
+    "title": "Risk Management Guidelines",
+    "topic": "risk_management",
+    "content": "Position sizing limits: maximum 5% of portfolio in any single position. Stop-loss: trailing stop at 15% for long positions. Sector concentration: no more than 25% in any single sector. Rebalancing: quarterly rebalancing to target weights, with tolerance bands of ±5%. Drawdown protocol: if portfolio drawdown exceeds 20%, reduce net exposure to 50% and review all positions. Hedging: use put options or inverse ETFs for tail risk protection when VIX exceeds 25. Cash position: maintain minimum 5% cash for opportunistic deployment."
+  },
+  {
+    "id": "KB003",
+    "title": "Research Methodology",
+    "topic": "research_methodology",
+    "content": "Each research report must include six components: 1) Company Overview — business model, products, market position, and competitive landscape. 2) Porter's Five Forces analysis — competitive rivalry, supplier power, buyer power, threat of substitutes, and threat of new entrants. 3) Five-Year Financial Trend Analysis — revenue, margins, EPS, FCF, and ROIC trends with peer comparisons. 4) Management Assessment — track record, capital allocation, insider ownership, and strategic vision. 5) Valuation — DCF analysis, comparable company multiples, and sum-of-the-parts with sensitivity tables. 6) Risk Factors — company-specific, industry, and macro risks with probability-impact assessment."
+  },
+  {
+    "id": "KB004",
+    "title": "ESG Scoring Criteria",
+    "topic": "esg",
+    "content": "IRA ESG scoring uses a weighted framework: Environmental (30%) — carbon emissions intensity, renewable energy usage, waste management, water stewardship, and climate risk disclosure. Social (30%) — labor practices, diversity & inclusion metrics, data privacy, product safety, and community engagement. Governance (40%) — board independence, executive compensation alignment, shareholder rights, audit quality, and anti-corruption policies. Each sub-criterion scored 1-10. Final ESG score calculated as weighted average. Scores below 4 trigger automatic review; scores below 2 result in exclusion from portfolio."
+  },
+  {
+    "id": "KB005",
+    "title": "Portfolio Allocation Strategy",
+    "topic": "portfolio_strategy",
+    "content": "IRA follows a 70/30 core-satellite approach. Core (70%) consists of low-cost ETFs and index funds tracking broad market indices (S&P 500, developed ex-US, emerging markets, aggregate bonds) with periodic rebalancing. Satellite (30%) comprises active stock picks, sector ETFs, and thematic positions. Tactical allocation allows 0-10% in alternatives (REITs, commodities, private credit). Rebalancing occurs quarterly with tolerance bands of ±5%. New positions are built through dollar-cost averaging over 4-6 weeks to reduce timing risk."
+  },
+  {
+    "id": "KB006",
+    "title": "SEC Filing Interpretation Guide",
+    "topic": "sec_filings",
+    "content": "Key SEC filings for equity research: 10-K (annual report) — comprehensive business overview, audited financials, risk factors, MD&A discussion. 10-Q (quarterly report) — unaudited interim financials, updated MD&A, legal proceedings. 8-K (current report) — material events (earnings releases, M&A, management changes, bankruptcy). DEF 14A (proxy statement) — executive compensation, board nominees, shareholder proposals. Form 4 — insider trading activity. Pay special attention to the MD&A section for management's forward-looking commentary and risk factor changes year-over-year."
+  }
+]

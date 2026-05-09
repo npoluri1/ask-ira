@@ -1,0 +1,48 @@
+[
+  {
+    "id": "desc-001",
+    "ticker": "AAPL",
+    "source": "company_overview",
+    "sector": "Technology",
+    "content": "Apple Inc. designs, manufactures, and markets smartphones (iPhone), personal computers (Mac), tablets (iPad), wearables (Apple Watch, AirPods), and home devices (Apple TV, HomePod). Its Services segment includes the App Store, Apple Music, Apple TV+, iCloud, Apple Pay, and the Apple Card. As of 2024, Apple has over 2 billion active devices worldwide and derives roughly 25% of revenue from Services, which carries higher margins than hardware. The company is known for vertical integration, premium brand positioning, and a growing focus on health technology through Apple Watch."
+  },
+  {
+    "id": "desc-002",
+    "ticker": "MSFT",
+    "source": "company_overview",
+    "sector": "Technology",
+    "content": "Microsoft Corporation operates three segments: Productivity & Business Processes (Office 365, LinkedIn, Dynamics 365), Intelligent Cloud (Azure, SQL Server, Windows Server, GitHub), and More Personal Computing (Windows, Surface, Xbox, Bing search advertising). Azure is the second-largest cloud provider with ~24% market share behind AWS. Microsoft's AI strategy centers on Copilot integration across Office, Azure, and GitHub, with OpenAI partnership providing exclusive access to GPT models. The company generates strong recurring revenue through enterprise licensing and has among the highest operating margins in big tech."
+  },
+  {
+    "id": "desc-003",
+    "ticker": "GOOGL",
+    "source": "company_overview",
+    "sector": "Technology",
+    "content": "Alphabet Inc. operates through Google Services (Search, YouTube, Android, Chrome, Maps, Gmail), Google Cloud (GCP, Workspace, Apigee), and Other Bets (Waymo autonomous driving, Verily life sciences, DeepMind AI research, Wing drone delivery). Google Search remains the dominant revenue driver, accounting for ~58% of total revenue through advertising. YouTube is the second-largest search engine globally. Google Cloud achieved operating profitability for the first time in 2025. Alphabet's 'Other Bets' are early-stage and mostly pre-revenue, with Waymo leading the autonomous vehicle market."
+  },
+  {
+    "id": "desc-004",
+    "ticker": "AMZN",
+    "source": "company_overview",
+    "sector": "Technology",
+    "content": "Amazon.com Inc. is the world's largest e-commerce platform by revenue and the leading cloud infrastructure provider through Amazon Web Services (AWS, ~30% market share). The company operates through three segments: North America, International (e-commerce), and AWS (cloud computing). AWS generates the majority of Amazon's operating income, cross-subsidizing the lower-margin retail business. Amazon is investing heavily in AI infrastructure, custom silicon (Trainium, Inferentia chips), and expanding its logistics network with same-day delivery capabilities."
+  },
+  {
+    "id": "desc-005",
+    "topic": "investment_thesis",
+    "source": "framework",
+    "content": "Investment Thesis Framework: A buy thesis requires three factors — 1) Sustainable competitive moat (brand, network effects, switching costs, cost advantage, or intangible assets), 2) Growing total addressable market (TAM growing at least 5% annually), and 3) Improving or stable margin profile (expanding operating leverage). Valuation entry criteria: P/E below 25x for growth companies with >10% EPS growth, or below 15x for value companies with 3-8% growth. Sell when: thesis breaks (moat erodes, market matures, margins compress), or valuation exceeds 40x P/E without commensurate growth, or a better risk-reward alternative emerges."
+  },
+  {
+    "id": "desc-006",
+    "topic": "portfolio_strategy",
+    "source": "framework",
+    "content": "Portfolio Allocation Strategy: IRA uses a 70/30 core-satellite approach. The 70% core consists of low-cost index ETFs tracking broad markets (S&P 500 40%, developed ex-US 15%, emerging markets 10%, aggregate bonds 5%). The 30% satellite allocation comprises active equity picks (15%), sector/thematic ETFs (10%), and tactical opportunities (5%). Rebalancing occurs quarterly with ±5% tolerance bands. New positions are built through dollar-cost averaging over 4-6 weeks. Cash drag is minimized by maintaining 5-10% cash for opportunistic deployment during market dislocations."
+  },
+  {
+    "id": "desc-007",
+    "topic": "risk_management",
+    "source": "framework",
+    "content": "Risk Assessment Matrix and Management: Risks are categorized into five types — Market (systematic, beta-driven), Sector (regulatory disruption, technology shifts), Company (management execution, competitive threat, product concentration), Liquidity (trading volume, bid-ask spread), and Geopolitical (tariffs, sanctions, regional instability). Each risk is scored on Probability (1-5) x Impact (1-5) matrix. Total risk score determines position sizing: 1-6 (full position), 7-12 (half position), 13-18 (quarter position), 19-25 (avoid). Mandatory quarterly risk review of all positions scoring above 10."
+  }
+]

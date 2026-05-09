@@ -1,0 +1,124 @@
+[project]
+name = "ask-ira"
+version = "0.2.0"
+description = "Ask IRA — Multi-Agent Investment Research System with LangGraph, MCP, RAG, streaming, and CI/CD"
+readme = "README.md"
+requires-python = ">=3.11"
+license = {text = "MIT"}
+authors = [
+    {name = "IRA Team"},
+]
+keywords = ["investment", "research", "agent", "langgraph", "mcp", "rag", "ai", "fastapi"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Financial and Insurance Industry",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Office/Business :: Financial :: Investment",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+
+# =============================================================================
+# CORE DEPENDENCIES
+# =============================================================================
+dependencies = [
+    "fastapi>=0.115.0",
+    "uvicorn[standard]>=0.32.0",
+    "langchain>=0.3.0",
+    "langchain-core>=0.3.0",
+    "langgraph>=0.3.0",
+    "langchain-openai>=0.2.0",
+    "langchain-community>=0.3.0",
+    "langchain-chroma>=0.2.0",
+    "chromadb>=0.5.0",
+    "sentence-transformers>=3.0.0",
+    "pydantic>=2.9.0",
+    "pydantic-settings>=2.5.0",
+    "httpx>=0.28.0",
+    "python-dotenv>=1.0.0",
+    "lxml>=5.3.0",
+    "beautifulsoup4>=4.12.0",
+    "pyyaml>=6.0.0",
+    "numpy>=1.26.0",
+    "pandas>=2.2.0",
+    "tenacity>=9.0.0",
+    "tiktoken>=0.8.0",
+    "rich>=13.0.0",
+    "websockets>=12.0",
+]
+
+[project.optional-dependencies]
+# =============================================================================
+# FREE LLM PROVIDERS (no credit card needed — pick one)
+# =============================================================================
+groq = ["langchain-groq>=0.2.0"]
+gemini = ["langchain-google-genai>=2.0.0"]
+ollama = ["langchain-ollama>=0.2.0"]
+huggingface = ["langchain-huggingface>=0.1.0"]
+openrouter = []  # Uses langchain-openai (already core) with custom base URL
+deepseek = []    # Uses langchain-openai (already core) with custom base URL
+together = []    # Uses langchain-openai (already core) with custom base URL
+fireworks = []   # Uses langchain-openai (already core) with custom base URL
+mistral = ["langchain-mistralai>=0.2.0"]
+
+# =============================================================================
+# PAID LLM PROVIDERS (need API key)
+# =============================================================================
+anthropic = ["langchain-anthropic>=0.2.0"]
+replicate = ["langchain-community"]  # Replicate via community llms (already core)
+
+# =============================================================================
+# PAID INFRASTRUCTURE (optional — app works without these)
+# =============================================================================
+postgres = ["asyncpg>=0.30.0"]
+redis = ["redis>=5.0.0"]
+
+# =============================================================================
+# DEV & TOOLING
+# =============================================================================
+dev = [
+    "pytest>=8.0.0",
+    "pytest-asyncio>=0.24.0",
+    "pytest-cov>=5.0.0",
+    "pytest-timeout>=2.3.0",
+    "httpx>=0.28.0",
+    "ruff>=0.7.0",
+    "ipykernel>=6.29.0",
+    "nbformat>=5.10.0",
+]
+mcp = ["mcp>=1.0.0"]
+eval = [
+    "ragas>=0.2.0",
+    "datasets>=3.0.0",
+]
+
+# =============================================================================
+# CONVENIENCE GROUPS
+# =============================================================================
+free = ["ask-ira[groq,gemini,ollama,huggingface,mistral]"]
+paid = ["ask-ira[anthropic,postgres,redis]"]
+all = ["ask-ira[free,paid,dev,mcp,eval]"]
+
+[project.urls]
+Homepage = "https://github.com/your-org/ask-ira"
+Repository = "https://github.com/your-org/ask-ira"
+Documentation = "https://github.com/your-org/ask-ira#readme"
+
+[project.scripts]
+ask-ira = "src.main:main"
+ask-ira-seed = "scripts.seed_data:entry_point"
+
+[tool.setuptools.packages.find]
+include = ["src*", "data*"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "N", "W"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"

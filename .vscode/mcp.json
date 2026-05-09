@@ -1,0 +1,32 @@
+{
+  "mcp_servers": {
+    "ask-ira-market-data": {
+      "command": "uvicorn",
+      "args": ["src.mcp_servers.registry:create_app", "--host", "0.0.0.0", "--port", "8101"],
+      "env": {},
+      "description": "Market data: stock prices, financials, SEC filings",
+      "type": "python"
+    },
+    "ask-ira-sentiment": {
+      "command": "uvicorn",
+      "args": ["src.mcp_servers.registry:create_app", "--host", "0.0.0.0", "--port", "8102"],
+      "env": {},
+      "description": "Sentiment: news headlines, social sentiment",
+      "type": "python"
+    },
+    "ask-ira-macro": {
+      "command": "uvicorn",
+      "args": ["src.mcp_servers.registry:create_app", "--host", "0.0.0.0", "--port", "8103"],
+      "env": {},
+      "description": "Macro: GDP, CPI, interest rates, employment",
+      "type": "python"
+    },
+    "ask-ira-internal-kb": {
+      "command": "uvicorn",
+      "args": ["src.mcp_servers.registry:create_app", "--host", "0.0.0.0", "--port", "8104"],
+      "env": {},
+      "description": "Internal KB: frameworks, methodology, ESG",
+      "type": "python"
+    }
+  }
+}

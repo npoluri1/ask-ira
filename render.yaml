@@ -1,0 +1,29 @@
+# Render Blueprint — free tier deploy (512MB RAM, 750 hours/month)
+# Sign up: https://render.com
+# Deploy: Connect GitHub repo → Render auto-detects this file
+services:
+  - type: web
+    name: ask-ira
+    runtime: python
+    region: oregon
+    plan: free
+    buildCommand: pip install -e ".[groq,gemini,ollama,huggingface,mistral,mcp,eval]"
+    startCommand: uvicorn src.main:app --host 0.0.0.0 --port 10000
+    healthCheckPath: /health
+    envVars:
+      - key: LLM_PROVIDER
+        value: openai
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: LOG_LEVEL
+        value: INFO
+      - key: ENVIRONMENT
+        value: production
+      - key: CORS_ORIGINS
+        value: "*"
+      - key: CHROMA_PERSIST_DIR
+        value: /var/data/chroma
+      - key: EMBEDDING_MODEL
+        value: sentence-transformers/all-MiniLM-L6-v2
+      - key: CACHE_ENABLED
+        value: true

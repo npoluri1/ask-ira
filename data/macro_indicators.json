@@ -1,0 +1,49 @@
+{
+  "gdp": {
+    "qoq": 2.8,
+    "yoy": 2.5,
+    "quarter": "Q1 2025",
+    "trend": "stable",
+    "notes": "Consumer spending remains the primary driver, with services outpacing goods. Business investment in AI infrastructure is an emerging tailwind."
+  },
+  "inflation": {
+    "cpi": 3.1,
+    "core_cpi": 3.4,
+    "pce": 2.6,
+    "core_pce": 2.8,
+    "trend": "moderating",
+    "notes": "Inflation continues to trend downward from 2022 peaks but remains above the Fed's 2% target. Shelter costs and services inflation are sticky."
+  },
+  "interest_rates": {
+    "fed_rate": 5.5,
+    "ten_year": 4.35,
+    "two_year": 4.72,
+    "spread_2y10y": -0.37,
+    "trend": "restrictive",
+    "notes": "Yield curve remains inverted since mid-2022. Market pricing suggests first rate cut in June 2025. Fed maintaining data-dependent stance."
+  },
+  "employment": {
+    "unemployment": 3.8,
+    "nonfarm_payrolls": 275000,
+    "labor_force_participation": 62.7,
+    "avg_hourly_earnings_yoy": 4.1,
+    "trend": "tight",
+    "notes": "Labor market remains resilient with strong job creation. Wage growth is gradually decelerating. Tech sector layoffs contrast with broad market strength."
+  },
+  "housing": {
+    "housing_starts": 1420000,
+    "existing_home_sales": 3900000,
+    "median_home_price": 392000,
+    "mortgage_rate_30yr": 6.85,
+    "trend": "subdued",
+    "notes": "Elevated mortgage rates continue to suppress housing affordability. Inventory remains low, keeping prices sticky despite low transaction volumes."
+  },
+  "consumer": {
+    "consumer_confidence": 104.2,
+    "retail_sales_mom": 0.3,
+    "personal_savings_rate": 3.9,
+    "consumer_credit_growth": 4.2,
+    "trend": "cautious",
+    "notes": "Consumer sentiment is improving but remains below pre-pandemic levels. Spending is rotating from goods to services. Credit card delinquencies are ticking up."
+  }
+}

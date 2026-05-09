@@ -1,0 +1,234 @@
+# =============================================================================
+# Ask IRA — Deploy Pipeline
+# =============================================================================
+# Auto-deploys on push to main to: Railway, GHCR, Vercel, Render, Kubernetes
+# All targets are free-tier eligible.
+# =============================================================================
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize, reopened]
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "Deployment target"
+        required: true
+        default: "railway"
+        type: choice
+        options:
+          - railway
+          - ghcr
+          - kubernetes
+          - vercel
+          - render
+          - all
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  # ============================================================================
+  # Staging: PR preview on Railway (free tier)
+  # ============================================================================
+  deploy-staging:
+    name: PR Preview → Railway
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request' && github.actor != 'dependabot[bot]'
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Railway CLI
+        run: npm install -g @railway/cli
+
+      - name: Deploy PR preview
+        run: |
+          railway up --service ask-ira-staging --detach \
+            --environment pr-${{ github.event.number }}
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+        continue-on-error: true
+
+      - name: Comment PR with preview URL
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `Preview deployed to Railway (staging)\nCommit: ${{ github.sha }}`
+            })
+
+  # ============================================================================
+  # Production: Railway (free tier — $5/mo credit, 512MB RAM)
+  # Sign up: https://railway.app
+  # ============================================================================
+  deploy-railway:
+    name: Railway
+    runs-on: ubuntu-latest
+    if: >
+      github.event_name == 'push' ||
+      (github.event_name == 'workflow_dispatch' &&
+       (inputs.environment == 'railway' || inputs.environment == 'all'))
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Railway CLI
+        run: npm install -g @railway/cli
+      - name: Deploy
+        run: railway up --service ask-ira --detach
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+
+  # ============================================================================
+  # Container Registry: GHCR (free — unlimited public images)
+  # No Docker Hub account needed. Uses GitHub's built-in container registry.
+  # ============================================================================
+  deploy-container:
+    name: GHCR Multi-Arch
+    runs-on: ubuntu-latest
+    if: >
+      github.event_name == 'push' ||
+      (github.event_name == 'workflow_dispatch' &&
+       (inputs.environment == 'ghcr' || inputs.environment == 'all'))
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Extract metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=sha,format=short
+            type=ref,event=branch
+            type=semver,pattern={{version}}
+            latest
+      - name: Build and push (amd64 + arm64)
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: deployment/Dockerfile
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+      - name: Trivy scan
+        uses: aquasecurity/trivy-action@0.19.0
+        with:
+          image-ref: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+          format: sarif
+          output: trivy-results.sarif
+          severity: HIGH,CRITICAL
+          exit-code: 1
+          hide-progress: true
+        continue-on-error: true
+      - name: Upload Trivy results
+        uses: github/codeql-action/upload-sarif@v3
+        if: always()
+        with:
+          sarif_file: trivy-results.sarif
+
+  # ============================================================================
+  # Kubernetes (needs a cluster — free options: K3s, Minikube, or cloud trial)
+  # ============================================================================
+  deploy-kubernetes:
+    name: Kubernetes
+    runs-on: ubuntu-latest
+    if: >
+      github.event_name == 'push' ||
+      (github.event_name == 'workflow_dispatch' &&
+       (inputs.environment == 'kubernetes' || inputs.environment == 'all'))
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up kubectl
+        uses: azure/setup-kubectl@v4
+        with:
+          version: "latest"
+      - name: Configure K8s context
+        uses: azure/k8s-set-context@v4
+        with:
+          kubeconfig: ${{ secrets.KUBECONFIG }}
+        continue-on-error: true
+      - name: Deploy manifests
+        run: |
+          kubectl apply -f deployment/kubernetes/deployment.yaml
+          kubectl apply -f deployment/kubernetes/hpa.yaml
+          kubectl apply -f deployment/kubernetes/ingress.yaml
+          kubectl apply -f deployment/kubernetes/configmap.yaml
+        continue-on-error: true
+      - name: Verify rollout
+        run: kubectl rollout status deployment/ask-ira --timeout=120s
+        continue-on-error: true
+
+  # ============================================================================
+  # Vercel (free tier — REST API only, no WebSocket)
+  # Sign up: https://vercel.com
+  # ============================================================================
+  deploy-vercel:
+    name: Vercel
+    runs-on: ubuntu-latest
+    if: >
+      github.event_name == 'push' ||
+      (github.event_name == 'workflow_dispatch' &&
+       (inputs.environment == 'vercel' || inputs.environment == 'all'))
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Vercel CLI
+        run: npm install -g vercel
+      - name: Deploy
+        run: |
+          vercel deploy --prod --token=${{ secrets.VERCEL_TOKEN }} \
+            --build-env LLM_PROVIDER=openai \
+            --build-env OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }} \
+            --yes
+        continue-on-error: true
+
+  # ============================================================================
+  # Render (free tier — 512MB RAM, 750 hours/month)
+  # Sign up: https://render.com
+  # ============================================================================
+  deploy-render:
+    name: Render
+    runs-on: ubuntu-latest
+    if: >
+      github.event_name == 'push' ||
+      (github.event_name == 'workflow_dispatch' &&
+       (inputs.environment == 'render' || inputs.environment == 'all'))
+    steps:
+      - name: Trigger Render deploy hook
+        run: curl -X POST "${{ secrets.RENDER_DEPLOY_HOOK_URL }}"
+        continue-on-error: true
+
+  # ============================================================================
+  # Post-deploy summary
+  # ============================================================================
+  notify:
+    name: Deploy Summary
+    runs-on: ubuntu-latest
+    needs: [deploy-railway, deploy-container, deploy-kubernetes, deploy-vercel, deploy-render]
+    if: always() && github.event_name == 'push'
+    steps:
+      - name: Print deploy results
+        run: |
+          echo "=== Deploy Results ==="
+          echo "Railway:    ${{ needs.deploy-railway.result }}"
+          echo "GHCR:       ${{ needs.deploy-container.result }}"
+          echo "Kubernetes: ${{ needs.deploy-kubernetes.result }}"
+          echo "Vercel:     ${{ needs.deploy-vercel.result }}"
+          echo "Render:     ${{ needs.deploy-render.result }}"

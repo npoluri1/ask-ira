@@ -1,0 +1,27 @@
+services:
+  api:
+    build:
+      context: ..
+      dockerfile: deployment/Dockerfile.dev
+    volumes:
+      - ..:/app
+    ports:
+      - "8000:8000"
+    command: ["uvicorn", "src.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+    environment:
+      LOG_LEVEL: DEBUG
+      LANGSMITH_TRACING: "false"
+
+  postgres:
+    ports:
+      - "5432:5432"
+
+  adminer:
+    image: adminer:latest
+    profiles:
+      - tools
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+    restart: unless-stopped

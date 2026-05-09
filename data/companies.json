@@ -1,0 +1,50 @@
+[
+  {
+    "ticker": "AAPL",
+    "name": "Apple Inc.",
+    "sector": "Technology",
+    "industry": "Consumer Electronics",
+    "description": "Apple designs, manufactures, and markets smartphones, personal computers, tablets, wearables, and accessories worldwide. Products include iPhone, Mac, iPad, Watch, AirPods, and services like App Store, Apple Music, iCloud, and Apple TV+.",
+    "founded": 1976,
+    "headquarters": "Cupertino, CA",
+    "ceo": "Tim Cook",
+    "employees": 164000,
+    "exchange": "NASDAQ"
+  },
+  {
+    "ticker": "MSFT",
+    "name": "Microsoft Corporation",
+    "sector": "Technology",
+    "industry": "Software—Infrastructure",
+    "description": "Microsoft develops and licenses software, services, devices, and solutions worldwide. Segments: Productivity & Business Processes (Office, LinkedIn, Dynamics), Intelligent Cloud (Azure, server products), and More Personal Computing (Windows, Surface, Xbox, search advertising).",
+    "founded": 1975,
+    "headquarters": "Redmond, WA",
+    "ceo": "Satya Nadella",
+    "employees": 221000,
+    "exchange": "NASDAQ"
+  },
+  {
+    "ticker": "GOOGL",
+    "name": "Alphabet Inc.",
+    "sector": "Technology",
+    "industry": "Internet Content & Information",
+    "description": "Alphabet offers Google advertising (Search, YouTube, Gmail), Google Cloud (GCP, Workspace), and Other Bets (Waymo, Verily, DeepMind). Google Services generates most revenue through search, YouTube ads, Android, Chrome, and Maps.",
+    "founded": 1998,
+    "headquarters": "Mountain View, CA",
+    "ceo": "Sundar Pichai",
+    "employees": 190234,
+    "exchange": "NASDAQ"
+  },
+  {
+    "ticker": "AMZN",
+    "name": "Amazon.com Inc.",
+    "sector": "Technology",
+    "industry": "Internet Retail",
+    "description": "Amazon operates e-commerce marketplace, Amazon Web Services (AWS) cloud computing (~30% market share), digital streaming (Prime Video, Amazon Music), and devices (Echo, Alexa, Kindle). AWS is the primary profit driver with enterprise-grade infrastructure.",
+    "founded": 1994,
+    "headquarters": "Seattle, WA",
+    "ceo": "Andy Jassy",
+    "employees": 1545000,
+    "exchange": "NASDAQ"
+  }
+]

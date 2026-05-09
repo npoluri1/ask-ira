@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ask-ira
+  labels:
+    app: ask-ira
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: ask-ira
+  template:
+    metadata:
+      labels:
+        app: ask-ira
+    spec:
+      containers:
+      - name: api
+        image: ask-ira:latest
+        ports:
+        - containerPort: 8000
+        env:
+        - name: ANTHROPIC_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: llm-keys
+              key: anthropic_api_key
+        - name: OPENAI_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: llm-keys
+              key: openai_api_key
+        - name: LANGSMITH_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: llm-keys
+              key: langsmith_api_key
+        - name: POSTGRES_DSN
+          value: "postgresql://askira:askira_secret@postgres:5432/askira"
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "250m"
+          limits:
+            memory: "2Gi"
+            cpu: "1"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ask-ira
+spec:
+  selector:
+    app: ask-ira
+  ports:
+  - port: 8000
+    targetPort: 8000
+  type: ClusterIP

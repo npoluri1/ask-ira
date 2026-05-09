@@ -1,0 +1,37 @@
+[
+  {
+    "id": "eval-001",
+    "question": "What is Apple's main business and key products?",
+    "expected": "Apple designs iPhones, Macs, iPads, and wearables. They also provide services like the App Store, Apple Music, and iCloud.",
+    "difficulty": "easy",
+    "category": "company_overview"
+  },
+  {
+    "id": "eval-002",
+    "question": "What is the recommended portfolio allocation strategy?",
+    "expected": "IRA uses a 70/30 core-satellite approach with broad index ETFs for the core and active picks for the satellite portion.",
+    "difficulty": "easy",
+    "category": "framework"
+  },
+  {
+    "id": "eval-003",
+    "question": "What are IRA's risk management position limits?",
+    "expected": "Maximum 5% in any single position, 15% stop-loss, 25% sector concentration, quarterly rebalancing.",
+    "difficulty": "medium",
+    "category": "risk_management"
+  },
+  {
+    "id": "eval-004",
+    "question": "How does IRA score ESG investments?",
+    "expected": "ESG scores use E(30%), S(30%), G(40%) weighting. Scores below 4 trigger review; below 2 result in exclusion.",
+    "difficulty": "medium",
+    "category": "esg"
+  },
+  {
+    "id": "eval-005",
+    "question": "Compare the cloud businesses of Amazon, Microsoft, and Google. What are their relative market positions?",
+    "expected": "AWS leads with ~30% market share, Azure is second with ~24%, Google Cloud is third but recently turned profitable. AWS generates most of Amazon's operating income.",
+    "difficulty": "hard",
+    "category": "competitive_analysis"
+  }
+]

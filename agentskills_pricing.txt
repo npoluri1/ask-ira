@@ -1,0 +1,80 @@
+================================================================================
+  AGENT SKILLS CLIENT SHOWCASE - PRICING BREAKDOWN FOR DAILY ROUTINE USE
+================================================================================
+
+A. FREE & OPEN SOURCE (Fully Free - No Payment Needed)
+================================================================================
+
+  No.  Tool Name              License   Daily Use Notes
+  ---  ---------------------- --------- -----------------------------------------
+   1   OpenCode               MIT       BYOK or local models via Ollama
+   2   OpenHands              MIT       Model-agnostic, scalable platform
+   3   Goose                  Apache-2  Extensible, any LLM, Block (Square)
+   4   Gemini CLI             Apache-2  Google's open-source terminal agent
+   5   Roo Code               Apache-2  VS Code extension, fully open
+   6   VS Code                MIT       Microsoft's editor, skills supported
+   7   pi                     MIT       Minimal terminal coding harness
+   8   VT Code                MIT       Multi-provider with failover
+   9   fast-agent             MIT       Skills development, ACPX support
+  10   Mistral AI Vibe        MIT       Mistral's terminal coding assistant
+  11   Autohand Code CLI      MIT       ReAct pattern, terminal-based
+  12   Mux                    AGPL      Parallel agents, isolated workspaces
+  13   Emdash                 MIT       Multi-agent desktop app, git worktrees
+  14   Laravel Boost          MIT       Laravel guidelines & skills
+  15   Letta                  Apache-2  Stateful agents with memory
+  16   Spring AI              Apache-2  Spring framework AI integration
+  17   Google AI Edge Gallery Apache-2  On-device LLMs for mobile
+  18   nanobot                MIT       Cross-platform (TG, Discord, Slack)
+
+
+B. FREEMIUM (Free Tier Exists + Paid Upgrade Available)
+================================================================================
+
+  No.  Tool Name              Free Tier Limit              Paid From
+  ---  ---------------------- ---------------------------- --------------------
+   1   Cursor                 Hobby (limited requests)     Pro $20/mo
+   2   GitHub Copilot         Free (2K completions/mo)     Pro $10/mo
+   3   Claude (web)           Free tier (limited msgs)     Pro $20/mo
+   4   Piebald                Basic (full features, BYOK)  Pro $20/mo
+   5   TRAE                   Limited basic usage          Lite $3/mo
+   6   Qodo                   Developer (250 credits/mo)   Team $30/user/mo
+   7   Workshop               Discover (250 AI credits/mo) Build $20/mo
+   8   Junie                  AI Free (3 credits/30d)      AI Pro $100/yr
+   9   Factory                Droid Core (open models)     Pro $20/mo
+  10   Firebender             Free tier (was available)    Flex $9/mo
+  11   Amp                    Free tier (paused)           Pay-as-you-go $5+
+  12   Kiro                   Free (50 vibe requests/mo)   Paid plans
+  13   Command Code           Free tier (very limited)     Go $1/mo
+  14   OpenAI Codex           Open source + API cost       API pay-per-token
+
+
+C. PREMIUM ONLY (No Free Tier for Daily Use)
+================================================================================
+
+  No.  Tool Name              Starting Price     Notes
+  ---  ---------------------- ------------------ --------------------------------
+   1   Claude Code            $100/mo (Max)      Removed from Pro for new users
+   2   Claude (agent feat.)   $20/mo (Pro)       Full agent capabilities
+   3   Ona                    Enterprise Only    Cloud-based background agents
+   4   Agentman               Enterprise Only    Healthcare revenue cycle
+   5   Databricks Genie Code  Enterprise Only    Data platform integrated
+   6   Snowflake Cortex Code  Enterprise Only    Snowflake native
+
+
+D. BEST FREE OPTIONS FOR DAILY ROUTINE CODING
+================================================================================
+
+  Rank  Tool             Key Advantage
+  ----  ---------------- -----------------------------------------------
+   1    OpenCode          75+ providers, local models, beautiful TUI
+   2    VS Code           Most popular editor, huge ecosystem
+   3    Roo Code          Full dev team in VS Code, open source
+   4    Goose             Extensible, Block-backed, any LLM
+   5    Gemini CLI        Google Gemini, terminal agent
+   6    OpenHands         Cloud-ready, scales to thousands
+   7    nanobot           Cross-platform, MCP support, lightweight
+
+
+================================================================================
+  Generated from https://agentskills.io/clients.md  |  Pricing as of May 2026
+================================================================================

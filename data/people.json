@@ -1,0 +1,62 @@
+[
+  {
+    "id": "person-001",
+    "first_name": "Hanu",
+    "last_name": "Madala",
+    "email": "hanu.madala@example.com",
+    "phone": "+1-555-0101",
+    "date_of_birth": "1985-03-15",
+    "role": "Chief Investment Officer",
+    "company": "IRA Capital Management",
+    "expertise": ["equity research", "portfolio management", "risk analysis"],
+    "years_experience": 18
+  },
+  {
+    "id": "person-002",
+    "first_name": "Shankar",
+    "last_name": "Cherukuri",
+    "email": "shankar.cherukuri@example.com",
+    "phone": "+1-555-0102",
+    "date_of_birth": "1988-07-22",
+    "role": "Senior Research Analyst",
+    "company": "IRA Capital Management",
+    "expertise": ["financial modeling", "valuations", "sector analysis", "ESG investing"],
+    "years_experience": 14
+  },
+  {
+    "id": "person-003",
+    "first_name": "Priya",
+    "last_name": "Sharma",
+    "email": "priya.sharma@example.com",
+    "phone": "+1-555-0103",
+    "date_of_birth": "1990-11-08",
+    "role": "Data Scientist",
+    "company": "IRA Capital Management",
+    "expertise": ["NLP", "machine learning", "quantitative analysis", "alternative data"],
+    "years_experience": 10
+  },
+  {
+    "id": "person-004",
+    "first_name": "Michael",
+    "last_name": "Chen",
+    "email": "michael.chen@example.com",
+    "phone": "+1-555-0104",
+    "date_of_birth": "1982-05-30",
+    "role": "Macro Strategist",
+    "company": "IRA Capital Management",
+    "expertise": ["macro economics", "interest rates", "currency markets", "geopolitical risk"],
+    "years_experience": 16
+  },
+  {
+    "id": "person-005",
+    "first_name": "Sarah",
+    "last_name": "Williams",
+    "email": "sarah.williams@example.com",
+    "phone": "+1-555-0105",
+    "date_of_birth": "1992-09-14",
+    "role": "Junior Analyst",
+    "company": "IRA Capital Management",
+    "expertise": ["financial reporting", "data visualization", "screening"],
+    "years_experience": 4
+  }
+]

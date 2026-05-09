@@ -1,0 +1,112 @@
+[
+  {
+    "id": "news-001",
+    "ticker": "AAPL",
+    "title": "Apple Beats Q1 Earnings Estimates on Strong Services Growth",
+    "source": "Reuters",
+    "date": "2025-01-30",
+    "url": "https://example.com/news/apple-q1-earnings-2025",
+    "summary": "Apple reported better-than-expected Q1 results driven by record services revenue of $25B. iPhone sales exceeded analyst expectations despite a challenging smartphone market.",
+    "sentiment": "positive",
+    "keywords": ["earnings", "services", "beat", "iPhone"]
+  },
+  {
+    "id": "news-002",
+    "ticker": "AAPL",
+    "title": "Apple Faces Regulatory Headwinds in EU Digital Markets Act",
+    "source": "Bloomberg",
+    "date": "2025-02-10",
+    "url": "https://example.com/news/apple-eu-dma",
+    "summary": "The European Commission has opened a new investigation into Apple's compliance with the Digital Markets Act, focusing on App Store policies and developer fees.",
+    "sentiment": "negative",
+    "keywords": ["regulation", "EU", "DMA", "App Store"]
+  },
+  {
+    "id": "news-003",
+    "ticker": "MSFT",
+    "title": "Microsoft Azure AI Revenue Surges 50% in Q2",
+    "source": "Reuters",
+    "date": "2025-01-15",
+    "url": "https://example.com/news/msft-azure-ai-q2",
+    "summary": "Microsoft reported Azure AI services revenue growth of 50% year-over-year, with AI contributing an annualized revenue run rate of $65B. Copilot adoption across enterprises continues to accelerate.",
+    "sentiment": "positive",
+    "keywords": ["Azure", "AI", "Copilot", "cloud"]
+  },
+  {
+    "id": "news-004",
+    "ticker": "MSFT",
+    "title": "Microsoft Activision Deal Faces FTC Scrutiny on Cloud Gaming",
+    "source": "Financial Times",
+    "date": "2025-02-05",
+    "url": "https://example.com/news/msft-activision-ftc",
+    "summary": "The FTC has raised new concerns about Microsoft's $69B Activision Blizzard acquisition, particularly regarding cloud gaming market concentration and content exclusivity.",
+    "sentiment": "negative",
+    "keywords": ["FTC", "Activision", "antitrust", "cloud gaming"]
+  },
+  {
+    "id": "news-005",
+    "ticker": "GOOGL",
+    "title": "Google Cloud Turns Profitable for First Time",
+    "source": "CNBC",
+    "date": "2025-01-20",
+    "url": "https://example.com/news/googl-cloud-profit",
+    "summary": "Alphabet reported that Google Cloud achieved operating profitability for the first time, posting $1.2B in operating income on $12B in quarterly revenue, driven by AI infrastructure demand.",
+    "sentiment": "positive",
+    "keywords": ["Google Cloud", "profitability", "AI", "infrastructure"]
+  },
+  {
+    "id": "news-006",
+    "ticker": "GOOGL",
+    "title": "Alphabet Faces Antitrust Trial Over Search Dominance",
+    "source": "Wall Street Journal",
+    "date": "2025-02-20",
+    "url": "https://example.com/news/googl-antitrust-trial",
+    "summary": "The US Department of Justice's antitrust trial against Alphabet began this week, alleging illegal monopoly maintenance in general search services and search text advertising.",
+    "sentiment": "negative",
+    "keywords": ["antitrust", "DOJ", "search", "monopoly"]
+  },
+  {
+    "id": "news-007",
+    "ticker": "AMZN",
+    "title": "Amazon AWS Announces New AI Chips to Compete with Nvidia",
+    "source": "Reuters",
+    "date": "2025-02-25",
+    "url": "https://example.com/news/amzn-aws-ai-chips",
+    "summary": "Amazon Web Services unveiled Trainium3 and Inferentia3 AI accelerators, claiming 2.5x better price-performance than comparable Nvidia chips for AI training and inference workloads.",
+    "sentiment": "positive",
+    "keywords": ["AWS", "AI chips", "Trainium", "inferentia"]
+  },
+  {
+    "id": "news-008",
+    "ticker": "AMZN",
+    "title": "Amazon Faces Supply Chain Disruptions Ahead of Holiday Season",
+    "source": "CNBC",
+    "date": "2025-03-01",
+    "url": "https://example.com/news/amzn-supply-chain",
+    "summary": "Ongoing geopolitical tensions and labor shortages are creating significant supply chain challenges for Amazon's retail operations, potentially impacting holiday season fulfillment.",
+    "sentiment": "negative",
+    "keywords": ["supply chain", "logistics", "labor", "holiday"]
+  },
+  {
+    "id": "news-009",
+    "ticker": "AAPL",
+    "title": "Apple Supplier TSMC Reports Strong 3nm Chip Demand for iPhone 17",
+    "source": "Reuters",
+    "date": "2025-03-05",
+    "url": "https://example.com/news/aapl-tsmc-3nm",
+    "summary": "TSMC indicated that capacity for its advanced 3nm process node is fully booked through 2026, with Apple as the primary customer. The next-generation A19 chip is expected to deliver 20% performance gains.",
+    "sentiment": "positive",
+    "keywords": ["TSMC", "semiconductor", "3nm", "supply chain"]
+  },
+  {
+    "id": "news-010",
+    "ticker": "MSFT",
+    "title": "Microsoft Announces AI Safety Framework for Enterprise Customers",
+    "source": "Bloomberg",
+    "date": "2025-03-10",
+    "url": "https://example.com/news/msft-ai-safety",
+    "summary": "Microsoft introduced a comprehensive AI safety framework including red-teaming requirements, content filters, and governance dashboards for enterprise Copilot deployments.",
+    "sentiment": "positive",
+    "keywords": ["AI safety", "enterprise", "governance", "Copilot"]
+  }
+]

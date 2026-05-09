@@ -1,0 +1,18 @@
+{
+  "positive_words": [
+    "bullish", "outperform", "growth", "profit", "strong", "upgrade",
+    "beat", "positive", "innovation", "expansion", "dividend", "buy",
+    "rally", "breakthrough", "momentum", "optimistic", "rebound",
+    "accelerate", "record", "leadership", "synergy", "efficiency"
+  ],
+  "negative_words": [
+    "bearish", "underperform", "decline", "loss", "weak", "downgrade",
+    "miss", "negative", "risk", "lawsuit", "volatility", "sell",
+    "plummet", "crash", "downturn", "default", "bankruptcy", "fraud",
+    "investigation", "penalty", "restructuring", "layoff"
+  ],
+  "neutral_words": [
+    "flat", "stable", "consistent", "expectations", "guidance",
+    "forecast", "projected", "estimated", "anticipated", "reported"
+  ]
+}
