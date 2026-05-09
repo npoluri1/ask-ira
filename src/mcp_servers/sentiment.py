@@ -1,9 +1,9 @@
-from data.loader import load_news_articles, load_sentiment_lexicon
 from src.mcp_servers.base import MCPRequest, MCPResponse, MCPServer
 
 
 class SentimentMCPServer(MCPServer):
     def __init__(self):
+        from data.loader import load_sentiment_lexicon
         lexicon = load_sentiment_lexicon()
         self.POSITIVE_WORDS = set(lexicon.get("positive_words", []))
         self.NEGATIVE_WORDS = set(lexicon.get("negative_words", []))
@@ -55,6 +55,7 @@ class SentimentMCPServer(MCPServer):
         return "AAPL"
 
     async def _fetch_news(self, ticker: str) -> list[dict]:
+        from data.loader import load_news_articles
         articles = load_news_articles(ticker)
         if articles:
             return [{"title": a["title"], "source": a["source"]} for a in articles[:10]]

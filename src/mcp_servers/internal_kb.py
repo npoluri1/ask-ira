@@ -1,9 +1,9 @@
-from data.loader import load_knowledge_base
 from src.mcp_servers.base import MCPRequest, MCPResponse, MCPServer
 
 
 class InternalKBMCPServer(MCPServer):
     def __init__(self):
+        from data.loader import load_knowledge_base
         raw = load_knowledge_base()
         self._articles = [
             {

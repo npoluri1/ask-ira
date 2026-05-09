@@ -1,6 +1,5 @@
 import httpx
 
-from data.loader import load_financial_metrics_for_ticker, load_sec_filings
 from src.mcp_servers.base import MCPRequest, MCPResponse, MCPServer
 
 
@@ -67,6 +66,7 @@ class MarketDataMCPServer(MCPServer):
                 return 150.0 + hash(ticker) % 5000 / 100
 
     async def _fetch_financials(self, ticker: str) -> dict:
+        from data.loader import load_financial_metrics_for_ticker
         result = load_financial_metrics_for_ticker(ticker)
         if result:
             return {
@@ -85,6 +85,7 @@ class MarketDataMCPServer(MCPServer):
         }
 
     async def _fetch_sec_filings(self, ticker: str) -> list[dict]:
+        from data.loader import load_sec_filings
         result = load_sec_filings(ticker)
         if result:
             return result[0].get("filings", [])

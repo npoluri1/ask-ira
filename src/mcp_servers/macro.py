@@ -1,4 +1,3 @@
-from data.loader import load_macro_indicators
 from src.mcp_servers.base import MCPRequest, MCPResponse, MCPServer
 
 
@@ -47,6 +46,7 @@ class MacroMCPServer(MCPServer):
         )
 
     async def _fetch_gdp(self) -> dict:
+        from data.loader import load_macro_indicators
         data = load_macro_indicators()
         gdp = data.get("gdp", {})
         return {
@@ -56,6 +56,7 @@ class MacroMCPServer(MCPServer):
         }
 
     async def _fetch_inflation(self) -> dict:
+        from data.loader import load_macro_indicators
         data = load_macro_indicators()
         inf = data.get("inflation", {})
         return {
@@ -65,6 +66,7 @@ class MacroMCPServer(MCPServer):
         }
 
     async def _fetch_interest_rates(self) -> dict:
+        from data.loader import load_macro_indicators
         data = load_macro_indicators()
         ir = data.get("interest_rates", {})
         return {
@@ -74,6 +76,7 @@ class MacroMCPServer(MCPServer):
         }
 
     async def _fetch_employment(self) -> dict:
+        from data.loader import load_macro_indicators
         data = load_macro_indicators()
         emp = data.get("employment", {})
         return {
