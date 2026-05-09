@@ -1,289 +1,396 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ask IRA — Investment Research Dashboard</title>
-<style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #0d1117; color: #c9d1d9; padding: 20px; }
-  .container { max-width: 1200px; margin: 0 auto; }
-  header { text-align: center; padding: 30px 0; border-bottom: 1px solid #30363d; margin-bottom: 30px; }
-  header h1 { color: #58a6ff; font-size: 28px; }
-  header p { color: #8b949e; margin-top: 8px; }
-  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-  @media (max-width: 800px) { .grid { grid-template-columns: 1fr; } }
-  .card { background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 20px; }
-  .card h2 { color: #58a6ff; font-size: 16px; margin-bottom: 15px; padding-bottom: 8px; border-bottom: 1px solid #30363d; }
-  textarea, select, input { width: 100%; padding: 10px; background: #0d1117; border: 1px solid #30363d; border-radius: 6px; color: #c9d1d9; font-size: 14px; margin-bottom: 12px; }
-  textarea { font-family: 'Courier New', monospace; resize: vertical; }
-  textarea:focus, select:focus, input:focus { outline: none; border-color: #58a6ff; }
-  button { background: #238636; color: #fff; border: none; padding: 10px 24px; border-radius: 6px; font-size: 14px; cursor: pointer; transition: background 0.2s; }
-  button:hover { background: #2ea043; }
-  button:disabled { opacity: 0.5; cursor: not-allowed; }
-  button.danger { background: #da3633; }
-  button.danger:hover { background: #f85149; }
-  .btn-group { display: flex; gap: 8px; margin-top: 8px; }
-  .result-box { background: #0d1117; border: 1px solid #30363d; border-radius: 6px; padding: 15px; margin-top: 10px; max-height: 500px; overflow-y: auto; font-family: 'Courier New', monospace; font-size: 13px; white-space: pre-wrap; }
-  .result-box .info { color: #8b949e; }
-  .result-box .success { color: #3fb950; }
-  .result-box .error { color: #f85149; }
-  .result-box .warning { color: #d29922; }
-  .stage-tag { display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 11px; margin-right: 4px; }
-  .stage-active { background: #1f6feb33; color: #58a6ff; border: 1px solid #1f6feb; }
-  .stage-done { background: #23863633; color: #3fb950; border: 1px solid #238636; }
-  .status-bar { display: flex; gap: 6px; flex-wrap: wrap; margin: 10px 0; }
-  .tabs { display: flex; gap: 0; margin-bottom: 0; }
-  .tabs button { border-radius: 0; background: #0d1117; border: 1px solid #30363d; color: #8b949e; }
-  .tabs button.active { background: #161b22; color: #c9d1d9; border-bottom: 2px solid #58a6ff; }
-  .tab-content { display: none; }
-  .tab-content.active { display: block; }
-  .meta { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-  .meta-item { background: #0d1117; border: 1px solid #30363d; border-radius: 6px; padding: 10px; text-align: center; }
-  .meta-item .label { color: #8b949e; font-size: 11px; }
-  .meta-item .value { color: #58a6ff; font-size: 18px; font-weight: bold; margin-top: 4px; }
-  label { display: block; color: #8b949e; font-size: 12px; margin-bottom: 4px; }
-  .row { display: flex; gap: 12px; }
-  .row > * { flex: 1; }
-  #connectionStatus { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 6px; }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#0a0e17">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>Ask IRA — AI Trading & Investment Platform</title>
+  <link rel="manifest" href="/ui/manifest.json">
+  <link rel="apple-touch-icon" href="/ui/img/icon-192.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <link rel="stylesheet" href="/ui/css/style.css">
 </head>
 <body>
-<div class="container">
-  <header>
-    <h1>Ask IRA — Investment Research Agent</h1>
-    <p>Interactive Dashboard · Swagger UI at <a href="/docs" style="color:#58a6ff;">/docs</a> · ReDoc at <a href="/redoc" style="color:#58a6ff;">/redoc</a></p>
-    <div style="margin-top:10px;color:#8b949e;font-size:13px;">
-      Server: <span id="serverStatus">checking...</span>
-      <span id="connectionStatus" style="background:#d29922;"></span>
-    </div>
-  </header>
-
-  <div class="grid">
-    <div class="card">
-      <h2>Query</h2>
-      <div class="tabs">
-        <button class="active" onclick="switchTab('rest')">REST</button>
-        <button onclick="switchTab('ws')">WebSocket</button>
+  <div id="app">
+    <!-- ===== SIDEBAR ===== -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="logo"><i class="fas fa-robot"></i><span>Ask IRA</span></div>
+        <small class="beta-tag">AI Trading Platform v0.2</small>
       </div>
+      <nav class="sidebar-nav">
+        <a href="#" class="nav-item active" data-page="dashboard"><i class="fas fa-chart-line"></i><span>Dashboard</span></a>
+        <a href="#" class="nav-item" data-page="research"><i class="fas fa-robot"></i><span>AI Research</span></a>
+        <div class="nav-section-label">Markets</div>
+        <a href="#" class="nav-item" data-page="stocks"><i class="fas fa-chart-bar"></i><span>Stocks</span></a>
+        <a href="#" class="nav-item" data-page="indices"><i class="fas fa-globe-asia"></i><span>Indices</span></a>
+        <a href="#" class="nav-item" data-page="forex"><i class="fas fa-dollar-sign"></i><span>Forex</span></a>
+        <a href="#" class="nav-item" data-page="crypto"><i class="fab fa-bitcoin"></i><span>Crypto</span></a>
+        <a href="#" class="nav-item" data-page="commodities"><i class="fas fa-oil-can"></i><span>Commodities</span></a>
+        <div class="nav-section-label">Investments</div>
+        <a href="#" class="nav-item" data-page="funds"><i class="fas fa-piggy-bank"></i><span>Funds & ETFs</span></a>
+        <a href="#" class="nav-item" data-page="bonds"><i class="fas fa-file-invoice"></i><span>Bonds</span></a>
+        <a href="#" class="nav-item" data-page="options"><i class="fas fa-random"></i><span>Options & Futures</span></a>
+        <a href="#" class="nav-item" data-page="ipos"><i class="fas fa-rocket"></i><span>IPOs</span></a>
+        <div class="nav-section-label">Portfolio</div>
+        <a href="#" class="nav-item" data-page="portfolio"><i class="fas fa-briefcase"></i><span>My Portfolio</span></a>
+        <a href="#" class="nav-item" data-page="watchlist"><i class="fas fa-star"></i><span>Watchlist</span></a>
+        <a href="#" class="nav-item" data-page="compare"><i class="fas fa-balance-scale"></i><span>Compare</span></a>
+        <a href="#" class="nav-item" data-page="risk"><i class="fas fa-shield-alt"></i><span>Risk Analysis</span></a>
+        <a href="#" class="nav-item" data-page="screener"><i class="fas fa-filter"></i><span>Market Screener</span></a>
+        <div class="nav-section-label">Account</div>
+        <a href="#" class="nav-item" data-page="alerts"><i class="fas fa-bell"></i><span>Alerts</span></a>
+        <a href="#" class="nav-item" data-page="settings"><i class="fas fa-cog"></i><span>Settings</span></a>
+      </nav>
+      <div class="sidebar-footer">
+        <div class="connection-status" id="connStatus"><i class="fas fa-circle"></i><span>Connected</span></div>
+        <small>Ask IRA · AI-Powered · Free Tier</small>
+      </div>
+    </aside>
 
-      <div id="tab-rest" class="tab-content active">
-        <label for="queryInput">Research Query</label>
-        <textarea id="queryInput" rows="3" placeholder="e.g. Should I invest in Microsoft given current interest rates?">Should I invest in Apple given current market conditions?</textarea>
-        <div class="row">
-          <div>
-            <label for="sessionId">Session ID</label>
-            <input id="sessionId" value="demo-ui" />
+    <!-- ===== MAIN ===== -->
+    <main class="main-content">
+      <!-- Top Bar -->
+      <header class="topbar">
+        <button class="mobile-menu-btn" id="menuToggle"><i class="fas fa-bars"></i></button>
+        <div class="market-ticker" id="marketTicker"></div>
+        <div class="topbar-right">
+          <button class="icon-btn" id="alertsBtn" title="Alerts"><i class="fas fa-bell"></i><span class="badge" id="alertBadge">3</span></button>
+          <button class="icon-btn" id="refreshBtn" title="Refresh"><i class="fas fa-sync-alt"></i></button>
+          <div class="clock" id="clock"></div>
+        </div>
+      </header>
+
+      <div class="page-content">
+        <!-- ===== DASHBOARD ===== -->
+        <section class="page active" id="page-dashboard">
+          <div class="page-header">
+            <h1><i class="fas fa-chart-line"></i> Market Dashboard</h1>
+            <div class="header-controls">
+              <select id="dashMarketFilter" class="form-select">
+                <option value="all">🌍 All Markets</option>
+                <option value="US">🇺🇸 USA</option><option value="IN">🇮🇳 India</option>
+                <option value="SG">🇸🇬 Singapore</option><option value="JP">🇯🇵 Japan</option>
+                <option value="GB">🇬🇧 UK</option><option value="DE">🇩🇪 Germany</option>
+                <option value="CN">🇨🇳 China</option><option value="HK">🇭🇰 Hong Kong</option>
+              </select>
+            </div>
           </div>
-          <div>
-            <label for="riskProfile">Risk Profile</label>
-            <select id="riskProfile">
-              <option value="">Auto</option>
-              <option value="conservative">Conservative</option>
-              <option value="moderate" selected>Moderate</option>
-              <option value="aggressive">Aggressive</option>
-            </select>
+          <div class="indices-grid" id="indicesGrid"></div>
+          <div class="dashboard-grid">
+            <div class="card chart-card">
+              <div class="card-header"><h3><i class="fas fa-area-chart"></i> Market Performance</h3><select id="chartPeriod" class="form-select-sm"><option value="1W">1W</option><option value="1M" selected>1M</option><option value="3M">3M</option><option value="1Y">1Y</option><option value="5Y">5Y</option></select></div>
+              <div class="card-body"><canvas id="marketChart"></canvas></div>
+            </div>
+            <div class="card">
+              <div class="card-header"><h3><i class="fas fa-arrow-up"></i> Top Movers</h3><div class="tab-group"><button class="tab-btn active" data-mover="gainers">Gainers</button><button class="tab-btn" data-mover="losers">Losers</button><button class="tab-btn" data-mover="volume">Volume</button></div></div>
+              <div class="card-body" id="moversList"></div>
+            </div>
           </div>
-        </div>
-        <div class="btn-group">
-          <button onclick="sendQuery()">Send Query</button>
-          <button class="danger" onclick="clearResult()">Clear</button>
-        </div>
-      </div>
+          <div class="dashboard-grid">
+            <div class="card"><div class="card-header"><h3><i class="fas fa-newspaper"></i> Market News</h3></div><div class="card-body" id="newsList"></div></div>
+            <div class="card"><div class="card-header"><h3><i class="fas fa-calendar-alt"></i> Economic Calendar</h3></div><div class="card-body" id="econCalendar"></div></div>
+          </div>
+          <div class="markets-in-bar">
+            <div class="card"><div class="card-header"><h3><i class="fas fa-clock"></i> Markets Status</h3></div>
+              <div class="card-body" id="marketStatus">
+                <div class="market-status-grid">
+                  <div class="mstatus-item open"><span class="mstatus-dot"></span>NYSE <span class="mstatus-time">Open</span></div>
+                  <div class="mstatus-item open"><span class="mstatus-dot"></span>NASDAQ <span class="mstatus-time">Open</span></div>
+                  <div class="mstatus-item closed"><span class="mstatus-dot"></span>NSE <span class="mstatus-time">Closed</span></div>
+                  <div class="mstatus-item open"><span class="mstatus-dot"></span>SGX <span class="mstatus-time">Open</span></div>
+                  <div class="mstatus-item closed"><span class="mstatus-dot"></span>HKEX <span class="mstatus-time">Closed</span></div>
+                  <div class="mstatus-item closed"><span class="mstatus-dot"></span>JPX <span class="mstatus-time">Closed</span></div>
+                  <div class="mstatus-item open"><span class="mstatus-dot"></span>LSE <span class="mstatus-time">Open</span></div>
+                  <div class="mstatus-item open"><span class="mstatus-dot"></span>XETRA <span class="mstatus-time">Open</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
 
-      <div id="tab-ws" class="tab-content">
-        <label for="wsQuery">Query (WebSocket)</label>
-        <textarea id="wsQuery" rows="3" placeholder="Type a query for real-time streaming...">Analyze MSFT stock with macro context</textarea>
-        <div class="btn-group">
-          <button id="wsConnectBtn" onclick="toggleWS()">Connect & Send</button>
-          <button class="danger" onclick="disconnectWS()">Disconnect</button>
-        </div>
-        <div class="status-bar" id="wsStages"></div>
-      </div>
+        <!-- ===== STOCKS ===== -->
+        <section class="page" id="page-stocks">
+          <div class="page-header"><h1><i class="fas fa-chart-bar"></i> Stocks <span class="badge-lg">NYSE · NASDAQ · NSE · SGX · HKEX · LSE</span></h1></div>
+          <div class="research-input-card">
+            <div class="input-group">
+              <input type="text" id="stockQuery" placeholder="Search ticker or company name (e.g., AAPL, Reliance, DBS)" class="form-input">
+              <select id="stockMarket" class="form-select">
+                <option value="US">🇺🇸 US</option><option value="IN">🇮🇳 India</option>
+                <option value="SG">🇸🇬 Singapore</option><option value="HK">🇭🇰 Hong Kong</option>
+                <option value="GB">🇬🇧 UK</option><option value="JP">🇯🇵 Japan</option>
+              </select>
+              <button id="stockSearchBtn" class="btn btn-primary"><i class="fas fa-search"></i> Analyze</button>
+            </div>
+            <div class="quick-queries">
+              <span class="quick-label">Popular:</span>
+              <button class="chip" data-stock="AAPL">AAPL</button>
+              <button class="chip" data-stock="TSLA">TSLA</button>
+              <button class="chip" data-stock="NVDA">NVDA</button>
+              <button class="chip" data-stock="RELIANCE.NS">RELIANCE</button>
+              <button class="chip" data-stock="TCS.NS">TCS</button>
+              <button class="chip" data-stock="DBS.SI">DBS</button>
+              <button class="chip" data-stock="MSFT">MSFT</button>
+              <button class="chip" data-stock="AMZN">AMZN</button>
+              <button class="chip" data-stock="META">META</button>
+              <button class="chip" data-stock="GOOGL">GOOGL</button>
+            </div>
+          </div>
+          <div id="stockResults" style="display:none"></div>
+          <div class="dashboard-grid">
+            <div class="card"><div class="card-header"><h3><i class="fas fa-fire"></i> Trending Stocks</h3></div><div class="card-body" id="trendingStocks"></div></div>
+            <div class="card"><div class="card-header"><h3><i class="fas fa-chart-simple"></i> Sector Performance</h3></div><div class="card-body"><canvas id="sectorChart"></canvas></div></div>
+          </div>
+        </section>
 
-      <div id="resultArea" class="result-box" style="display:none;"></div>
-    </div>
+        <!-- ===== INDICES ===== -->
+        <section class="page" id="page-indices">
+          <div class="page-header"><h1><i class="fas fa-globe-asia"></i> Global Indices</h1><select id="indicesFilter" class="form-select"><option value="all">All</option><option value="US">🇺🇸 Americas</option><option value="APAC">🌏 Asia Pacific</option><option value="EMEA">🌍 EMEA</option></select></div>
+          <div class="indices-grid" id="allIndicesGrid"></div>
+          <div class="card" style="margin-top:16px"><div class="card-header"><h3><i class="fas fa-chart-line"></i> Index Performance Comparison</h3></div><div class="card-body"><canvas id="indicesChart"></canvas></div></div>
+        </section>
 
-    <div class="card">
-      <h2>Server Status</h2>
-      <div class="meta" id="metaData">
-        <div class="meta-item"><div class="label">Service</div><div class="value" id="svcName">-</div></div>
-        <div class="meta-item"><div class="label">Version</div><div class="value" id="svcVersion">-</div></div>
-        <div class="meta-item"><div class="label">Uptime</div><div class="value" id="svcUptime">-</div></div>
-        <div class="meta-item"><div class="label">Status</div><div class="value" id="svcStatus">-</div></div>
-      </div>
+        <!-- ===== FOREX ===== -->
+        <section class="page" id="page-forex">
+          <div class="page-header"><h1><i class="fas fa-dollar-sign"></i> Forex Market</h1><div class="header-controls"><select id="forexFilter" class="form-select"><option value="all">All Pairs</option><option value="major">Majors</option><option value="minor">Minors</option><option value="exotic">Exotics</option></select></div></div>
+          <div class="forex-grid" id="forexGrid"></div>
+          <div class="card" style="margin-top:16px"><div class="card-header"><h3><i class="fas fa-chart-area"></i> EUR/USD Chart</h3></div><div class="card-body"><canvas id="forexChart"></canvas></div></div>
+        </section>
 
-      <h2 style="margin-top:20px;">Sample Queries</h2>
-      <div style="display:flex;flex-direction:column;gap:6px;">
-        <button style="background:#1f6feb;font-size:12px;padding:8px;" onclick="loadQuery('What is Apple\\'s competitive position and growth outlook?')">📊 AAPL Competitive Position</button>
-        <button style="background:#1f6feb;font-size:12px;padding:8px;" onclick="loadQuery('Build a conservative portfolio with MSFT and bonds')">📈 Conservative Portfolio</button>
-        <button style="background:#1f6feb;font-size:12px;padding:8px;" onclick="loadQuery('Analyze MSFT risk factors and VaR')">⚠️ Risk Assessment</button>
-        <button style="background:#1f6feb;font-size:12px;padding:8px;" onclick="loadQuery('How does the interest rate environment affect tech stocks?')">🏛️ Macro Impact</button>
-        <button style="background:#da3633;font-size:12px;padding:8px;" onclick="loadQuery('How can I hack the stock market?')">🔒 Test Guardrails</button>
+        <!-- ===== CRYPTO ===== -->
+        <section class="page" id="page-crypto">
+          <div class="page-header"><h1><i class="fab fa-bitcoin"></i> Cryptocurrency</h1></div>
+          <div class="crypto-grid" id="cryptoGrid"></div>
+          <div class="card" style="margin-top:16px"><div class="card-header"><h3><i class="fas fa-chart-area"></i> BTC/USD Chart</h3></div><div class="card-body"><canvas id="cryptoChart"></canvas></div></div>
+        </section>
+
+        <!-- ===== COMMODITIES ===== -->
+        <section class="page" id="page-commodities">
+          <div class="page-header"><h1><i class="fas fa-oil-can"></i> Commodities</h1></div>
+          <div class="commodities-grid" id="commoditiesGrid"></div>
+        </section>
+
+        <!-- ===== BONDS ===== -->
+        <section class="page" id="page-bonds">
+          <div class="page-header"><h1><i class="fas fa-file-invoice"></i> Bonds & Fixed Income</h1></div>
+          <div class="bonds-grid" id="bondsGrid"></div>
+        </section>
+
+        <!-- ===== OPTIONS & FUTURES ===== -->
+        <section class="page" id="page-options">
+          <div class="page-header"><h1><i class="fas fa-random"></i> Options & Futures</h1></div>
+          <div class="research-input-card">
+            <div class="input-group">
+              <input type="text" id="optionsTicker" placeholder="Ticker (e.g., AAPL, SPY)" class="form-input">
+              <select id="optionsType" class="form-select"><option value="options">Options</option><option value="futures">Futures</option></select>
+              <button id="optionsSearchBtn" class="btn btn-primary"><i class="fas fa-search"></i> Get Chain</button>
+            </div>
+          </div>
+          <div id="optionsResults"></div>
+        </section>
+
+        <!-- ===== IPOS ===== -->
+        <section class="page" id="page-ipos">
+          <div class="page-header"><h1><i class="fas fa-rocket"></i> IPOs & New Listings</h1></div>
+          <div class="ipos-grid" id="iposGrid"></div>
+        </section>
+
+        <!-- ===== RESEARCH ===== -->
+        <section class="page" id="page-research">
+          <div class="page-header"><h1><i class="fas fa-robot"></i> AI-Powered Research</h1><span class="badge-lg">Powered by Free LLM</span></div>
+          <div class="research-input-card">
+            <div class="input-group">
+              <input type="text" id="researchQuery" placeholder="Ask anything: 'Analyze AAPL', 'Compare TSLA vs Ford', 'Best Indian IT stocks', 'Singapore REIT outlook'" class="form-input">
+              <select id="researchMarketFilter" class="form-select">
+                <option value="all">🌍 All Markets</option>
+                <option value="US">🇺🇸 US</option><option value="IN">🇮🇳 India</option>
+                <option value="SG">🇸🇬 Singapore</option><option value="global">🌐 Global</option>
+              </select>
+              <button id="researchBtn" class="btn btn-primary"><i class="fas fa-robot"></i> Research</button>
+            </div>
+            <div class="quick-queries">
+              <span class="quick-label">Quick Research:</span>
+              <button class="chip" data-q="Analyze Apple (AAPL) with financials, risks and outlook">AAPL Deep Dive</button>
+              <button class="chip" data-q="Best stocks to buy in Indian market right now">India Picks</button>
+              <button class="chip" data-q="Singapore REIT market analysis and top picks">SG REITs</button>
+              <button class="chip" data-q="Compare Nvidia vs AMD vs Intel for AI investment">AI Chips Battle</button>
+              <button class="chip" data-q="Top cryptocurrency investment analysis 2025">Crypto Outlook</button>
+              <button class="chip" data-q="Forex market analysis USD/INR EUR/USD GBP/USD">Forex View</button>
+              <button class="chip" data-q="Best mutual funds and ETFs for long term growth">Funds Pick</button>
+              <button class="chip" data-q="Commodity market outlook gold silver crude oil">Commodities</button>
+            </div>
+          </div>
+          <div class="research-results" id="researchResults" style="display:none;">
+            <div class="research-tabs">
+              <button class="r-tab active" data-rtab="report">Report</button>
+              <button class="r-tab" data-rtab="analysis">Analysis</button>
+              <button class="r-tab" data-rtab="mcp">MCP Data</button>
+              <button class="r-tab" data-rtab="portfolio">Portfolio</button>
+              <button class="r-tab" data-rtab="risk">Risk</button>
+            </div>
+            <div class="research-content" id="researchContent"></div>
+          </div>
+        </section>
+
+        <!-- ===== WATCHLIST ===== -->
+        <section class="page" id="page-watchlist">
+          <div class="page-header"><h1><i class="fas fa-star"></i> Watchlist</h1><button class="btn btn-sm" id="addWatchBtn"><i class="fas fa-plus"></i> Add Symbol</button></div>
+          <div class="card"><div class="card-body" id="watchlistBody"><p class="text-center">Your watchlist is empty. Add symbols to track.</p></div></div>
+        </section>
+
+        <!-- ===== PORTFOLIO ===== -->
+        <section class="page" id="page-portfolio">
+          <div class="page-header"><h1><i class="fas fa-briefcase"></i> My Portfolio</h1><button class="btn btn-sm" id="addHoldingBtn"><i class="fas fa-plus"></i> Add</button></div>
+          <div class="portfolio-summary" id="portfolioSummary"></div>
+          <div class="dashboard-grid">
+            <div class="card card-2col"><div class="card-header"><h3><i class="fas fa-list"></i> Holdings</h3></div>
+              <div class="card-body" style="overflow-x:auto"><table class="table"><thead><tr><th>Asset</th><th>Type</th><th>Market</th><th>Qty</th><th>Avg Cost</th><th>Current</th><th>Value</th><th>P&L</th><th>Return</th><th></th></tr></thead><tbody id="holdingsBody"></tbody></table></div>
+            </div>
+            <div class="card"><div class="card-header"><h3><i class="fas fa-chart-pie"></i> Allocation</h3></div><div class="card-body"><canvas id="allocationChart"></canvas></div></div>
+          </div>
+        </section>
+
+        <!-- ===== SCREENER ===== -->
+        <section class="page" id="page-screener">
+          <div class="page-header"><h1><i class="fas fa-filter"></i> Market Screener</h1></div>
+          <div class="research-input-card">
+            <div class="input-group">
+              <select id="screenerMarket" class="form-select"><option value="US">🇺🇸 US</option><option value="IN">🇮🇳 India</option><option value="SG">🇸🇬 Singapore</option></select>
+              <select id="screenerType" class="form-select"><option value="stocks">Stocks</option><option value="etfs">ETFs</option><option value="all">All</option></select>
+              <select id="screenerSort" class="form-select"><option value="volume">Most Active</option><option value="gainers">Top Gainers</option><option value="losers">Top Losers</option><option value="marketCap">Market Cap</option></select>
+              <button id="screenerBtn" class="btn btn-primary"><i class="fas fa-filter"></i> Screen</button>
+            </div>
+          </div>
+          <div id="screenerResults" class="card"><div class="card-body"><div class="loader"></div></div></div>
+        </section>
+
+        <!-- ===== COMPARE ===== -->
+        <section class="page" id="page-compare">
+          <div class="page-header"><h1><i class="fas fa-balance-scale"></i> Company Comparison</h1></div>
+          <div class="research-input-card">
+            <div class="input-group">
+              <input type="text" id="compTicker1" placeholder="Ticker 1 (e.g., AAPL)" class="form-input">
+              <input type="text" id="compTicker2" placeholder="Ticker 2 (e.g., MSFT)" class="form-input">
+              <input type="text" id="compTicker3" placeholder="Ticker 3 (optional)" class="form-input">
+              <button id="compareBtn" class="btn btn-primary"><i class="fas fa-balance-scale"></i> Compare</button>
+            </div>
+          </div>
+          <div id="comparisonResults" style="display:none"></div>
+        </section>
+
+        <!-- ===== RISK ===== -->
+        <section class="page" id="page-risk">
+          <div class="page-header"><h1><i class="fas fa-shield-alt"></i> Risk Analysis</h1></div>
+          <div class="research-input-card">
+            <div class="input-group">
+              <input type="text" id="riskTicker" placeholder="Ticker (e.g., AAPL, TSLA, 2330.TW)" class="form-input">
+              <select id="riskProfile" class="form-select"><option value="conservative">Conservative</option><option value="moderate" selected>Moderate</option><option value="aggressive">Aggressive</option></select>
+              <button id="riskBtn" class="btn btn-primary"><i class="fas fa-shield-alt"></i> Analyze</button>
+            </div>
+          </div>
+          <div id="riskResults" style="display:none"></div>
+        </section>
+
+        <!-- ===== ALERTS ===== -->
+        <section class="page" id="page-alerts">
+          <div class="page-header"><h1><i class="fas fa-bell"></i> Price Alerts</h1><button class="btn btn-sm" id="addAlertBtn"><i class="fas fa-plus"></i> Add Alert</button></div>
+          <div class="card"><div class="card-body" id="alertsList"></div></div>
+        </section>
+
+        <!-- ===== SETTINGS ===== -->
+        <section class="page" id="page-settings">
+          <div class="page-header"><h1><i class="fas fa-cog"></i> Settings</h1></div>
+          <div class="settings-grid">
+            <div class="card"><div class="card-header"><h3><i class="fas fa-microchip"></i> AI Model Provider</h3></div>
+              <div class="card-body">
+                <p style="color:var(--text-muted);font-size:13px;margin-bottom:12px">Choose your LLM provider. All free options require no credit card.</p>
+                <div class="form-group"><label>Current Provider</label>
+                  <select id="settingsProvider" class="form-select">
+                    <option value="openai">OpenAI (GPT-4o) — Your API Key</option>
+                    <option value="groq">Groq (FREE) — 30 req/min, no credit card</option>
+                    <option value="gemini">Gemini (FREE) — 60 req/min</option>
+                    <option value="ollama">Ollama (FREE) — Local, no API key</option>
+                    <option value="huggingface">HuggingFace (FREE) — Token required</option>
+                    <option value="openrouter">OpenRouter (FREE) — 200+ free models</option>
+                    <option value="deepseek">DeepSeek (~$0) — $0.14/M tokens</option>
+                    <option value="mistral">Mistral (FREE) — Free tier</option>
+                    <option value="together">Together AI (FREE) — $25 free credits</option>
+                    <option value="fireworks">Fireworks AI (FREE) — Free tier</option>
+                  </select>
+                </div>
+                <div class="form-group" style="margin-top:10px"><label>API Key (if required)</label><input type="password" id="settingsApiKey" class="form-input" placeholder="Enter your API key"></div>
+                <button class="btn btn-primary" style="margin-top:12px" id="saveSettings"><i class="fas fa-save"></i> Save Settings</button>
+                <div id="settingsStatus" style="margin-top:8px;font-size:12px;color:var(--accent-green)"></div>
+              </div>
+            </div>
+            <div class="card"><div class="card-header"><h3><i class="fas fa-palette"></i> Display</h3></div>
+              <div class="card-body">
+                <div class="form-group"><label>Theme</label><select class="form-select"><option value="dark">Dark (Default)</option><option value="light">Light</option></select></div>
+                <div class="form-group" style="margin-top:10px"><label>Currency</label><select class="form-select"><option value="USD">USD ($)</option><option value="INR">INR (₹)</option><option value="SGD">SGD (S$)</option><option value="JPY">JPY (¥)</option><option value="EUR">EUR (€)</option><option value="GBP">GBP (£)</option></select></div>
+                <div class="form-group" style="margin-top:10px"><label>Default Market</label><select class="form-select"><option value="US">🇺🇸 USA</option><option value="IN">🇮🇳 India</option><option value="SG">🇸🇬 Singapore</option><option value="JP">🇯🇵 Japan</option><option value="GB">🇬🇧 UK</option></select></div>
+              </div>
+            </div>
+            <div class="card"><div class="card-header"><h3><i class="fas fa-info-circle"></i> About</h3></div>
+              <div class="card-body">
+                <p style="font-size:13px;color:var(--text-secondary);line-height:1.6">
+                  <strong>Ask IRA</strong> — AI-powered multi-asset trading & investment platform.<br>
+                  Powered by LangGraph multi-agent orchestration, MCP dynamic tool discovery, and hybrid RAG pipeline.<br><br>
+                  <strong>Securities:</strong> Stocks · ETFs · Mutual Funds · Indices · Forex · Crypto · Commodities · Bonds · Options · Futures · IPOs<br>
+                  <strong>Markets:</strong> USA · India · Singapore · Japan · UK · Germany · China · Hong Kong · Global<br>
+                  <strong>Version:</strong> 0.2.0<br>
+                  <strong>License:</strong> MIT<br>
+                  <strong>Model:</strong> Currently using free LLM tier
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
       </div>
+    </main>
+  </div>
+
+  <!-- Modals -->
+  <div class="modal" id="holdingModal">
+    <div class="modal-content"><div class="modal-header"><h3>Add Holding</h3><button class="modal-close">&times;</button></div>
+      <div class="modal-body">
+        <div class="form-group"><label>Ticker</label><input type="text" id="holdingTicker" class="form-input" placeholder="e.g., AAPL"></div>
+        <div class="form-group"><label>Asset Type</label><select id="holdingType" class="form-select"><option value="stock">Stock</option><option value="etf">ETF</option><option value="mutual_fund">Mutual Fund</option><option value="crypto">Crypto</option><option value="bond">Bond</option></select></div>
+        <div class="form-group"><label>Quantity</label><input type="number" id="holdingQty" class="form-input" value="1"></div>
+        <div class="form-group"><label>Avg Cost ($)</label><input type="number" id="holdingCost" class="form-input" step="0.01"></div>
+        <div class="form-group"><label>Market</label><select id="holdingMarket" class="form-select"><option value="US">🇺🇸 USA</option><option value="IN">🇮🇳 India</option><option value="SG">🇸🇬 Singapore</option></select></div>
+      </div>
+      <div class="modal-footer"><button class="btn" id="cancelHolding">Cancel</button><button class="btn btn-primary" id="saveHolding">Add</button></div>
     </div>
   </div>
-</div>
 
-<script>
-  const API = window.location.origin;
+  <div class="modal" id="watchModal">
+    <div class="modal-content"><div class="modal-header"><h3>Add to Watchlist</h3><button class="modal-close">&times;</button></div>
+      <div class="modal-body">
+        <div class="form-group"><label>Ticker Symbol</label><input type="text" id="watchTicker" class="form-input" placeholder="e.g., AAPL, RELIANCE.NS"></div>
+        <div class="form-group"><label>Market</label><select id="watchMarket" class="form-select"><option value="US">🇺🇸 USA</option><option value="IN">🇮🇳 India</option><option value="SG">🇸🇬 Singapore</option></select></div>
+      </div>
+      <div class="modal-footer"><button class="btn" id="cancelWatch">Cancel</button><button class="btn btn-primary" id="saveWatch">Add</button></div>
+    </div>
+  </div>
 
-  async function checkServer() {
-    try {
-      const r = await fetch(`${API}/health`);
-      const d = await r.json();
-      document.getElementById('serverStatus').textContent = '● online';
-      document.getElementById('connectionStatus').style.background = '#3fb950';
-      document.getElementById('svcName').textContent = d.service || 'ask-ira';
-      document.getElementById('svcVersion').textContent = d.version || '-';
-      document.getElementById('svcUptime').textContent = formatUptime(d.uptime_seconds);
-      document.getElementById('svcStatus').textContent = d.status || '-';
-    } catch {
-      document.getElementById('serverStatus').textContent = '● offline';
-      document.getElementById('connectionStatus').style.background = '#f85149';
-    }
-  }
+  <div class="modal" id="alertModal">
+    <div class="modal-content"><div class="modal-header"><h3>Create Alert</h3><button class="modal-close">&times;</button></div>
+      <div class="modal-body">
+        <div class="form-group"><label>Ticker</label><input type="text" id="alertTicker" class="form-input" placeholder="e.g., AAPL"></div>
+        <div class="form-group"><label>Condition</label><select id="alertCondition" class="form-select"><option value="above">Price Above</option><option value="below">Price Below</option><option value="change">Change %</option></select></div>
+        <div class="form-group"><label>Value</label><input type="number" id="alertValue" class="form-input" step="0.01"></div>
+      </div>
+      <div class="modal-footer"><button class="btn" id="cancelAlert">Cancel</button><button class="btn btn-primary" id="saveAlert">Create</button></div>
+    </div>
+  </div>
 
-  function formatUptime(s) {
-    if (!s) return '-';
-    const d = Math.floor(s / 86400);
-    const h = Math.floor((s % 86400) / 3600);
-    const m = Math.floor((s % 3600) / 60);
-    return d > 0 ? `${d}d ${h}h` : h > 0 ? `${h}h ${m}m` : `${m}m`;
-  }
-
-  function switchTab(name) {
-    document.querySelectorAll('.tabs button').forEach(b => b.classList.remove('active'));
-    document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-    document.querySelector(`.tabs button[onclick*="'${name}'"]`).classList.add('active');
-    document.getElementById(`tab-${name}`).classList.add('active');
-  }
-
-  function loadQuery(q) {
-    document.getElementById('queryInput').value = q;
-    switchTab('rest');
-  }
-
-  async function sendQuery() {
-    const query = document.getElementById('queryInput').value.trim();
-    if (!query) return alert('Enter a query');
-
-    const area = document.getElementById('resultArea');
-    area.style.display = 'block';
-    area.innerHTML = '<span class="info">⏳ Sending query...</span>';
-
-    try {
-      const body = {
-        query,
-        session_id: document.getElementById('sessionId').value || 'ui-default',
-      };
-      const rp = document.getElementById('riskProfile').value;
-      if (rp) body.risk_profile = rp;
-
-      const res = await fetch(`${API}/api/v1/query`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body),
-      });
-      const data = await res.json();
-
-      let html = '<span class="success">✅ Response received</span>\n\n';
-      if (data.confidence) html += `Confidence: ${(data.confidence * 100).toFixed(0)}%\n\n`;
-      if (data.report) html += `${data.report.slice(0, 3000)}${data.report.length > 3000 ? '\n... (truncated)' : ''}\n`;
-      if (data.portfolio_allocation) {
-        html += '\n── Portfolio Allocation ──\n';
-        html += JSON.stringify(data.portfolio_allocation, null, 2).slice(0, 500);
-      }
-      if (data.risk_assessment) {
-        html += '\n── Risk Assessment ──\n';
-        html += data.risk_assessment.slice(0, 500);
-      }
-      if (data.mcp_results) {
-        html += '\n── MCP Results ──\n';
-        for (const [k, v] of Object.entries(data.mcp_results)) {
-          html += `[${k}] ${v.slice(0, 100)}\n`;
-        }
-      }
-      area.innerHTML = html;
-    } catch (e) {
-      area.innerHTML = `<span class="error">❌ Error: ${e.message}</span>`;
-    }
-  }
-
-  function clearResult() {
-    const area = document.getElementById('resultArea');
-    area.style.display = 'none';
-    area.innerHTML = '';
-  }
-
-  let ws = null;
-
-  function toggleWS() {
-    if (ws && ws.readyState === WebSocket.OPEN) { disconnectWS(); return; }
-    const query = document.getElementById('wsQuery').value.trim();
-    if (!query) return alert('Enter a query');
-
-    const sid = 'ws-' + Date.now();
-    ws = new WebSocket(`${window.location.origin.replace(/^http/, 'ws')}/api/v1/ws/${sid}`);
-
-    const stagesEl = document.getElementById('wsStages');
-    const btn = document.getElementById('wsConnectBtn');
-
-    ws.onopen = () => {
-      btn.textContent = 'Streaming...';
-      btn.disabled = true;
-      stagesEl.innerHTML = '';
-      ws.send(JSON.stringify({ query }));
-    };
-
-    ws.onmessage = (e) => {
-      const data = JSON.parse(e.data);
-      if (data.type === 'status') {
-        const tag = document.createElement('span');
-        tag.className = 'stage-tag stage-active';
-        tag.textContent = data.stage || data.message;
-        stagesEl.appendChild(tag);
-        stagesEl.scrollTop = stagesEl.scrollHeight;
-      } else if (data.type === 'report_chunk') {
-        const area = document.getElementById('resultArea');
-        area.style.display = 'block';
-        area.textContent += data.content;
-      } else if (data.type === 'complete') {
-        const tag = document.createElement('span');
-        tag.className = 'stage-tag stage-done';
-        tag.textContent = '✅ Complete';
-        stagesEl.appendChild(tag);
-        btn.textContent = 'Reconnect';
-        btn.disabled = false;
-      } else if (data.type === 'error') {
-        const area = document.getElementById('resultArea');
-        area.style.display = 'block';
-        area.innerHTML = `<span class="error">❌ ${data.message}</span>`;
-        btn.textContent = 'Reconnect';
-        btn.disabled = false;
-      }
-      document.querySelectorAll('.stage-tag').forEach(t => t.className = 'stage-tag stage-done');
-    };
-
-    ws.onerror = () => {
-      btn.textContent = 'Connect & Send';
-      btn.disabled = false;
-    };
-
-    ws.onclose = () => {
-      btn.textContent = 'Reconnect';
-      btn.disabled = false;
-    };
-  }
-
-  function disconnectWS() {
-    if (ws) { ws.close(); ws = null; }
-    document.getElementById('wsConnectBtn').textContent = 'Connect & Send';
-    document.getElementById('wsConnectBtn').disabled = false;
-  }
-
-  checkServer();
-  setInterval(checkServer, 15000);
-</script>
+  <script src="/ui/js/api.js"></script>
+  <script src="/ui/js/app.js"></script>
+  <script>if ('serviceWorker' in navigator) { navigator.serviceWorker.register('/ui/sw.js').catch(() => {}); }</script>
 </body>
 </html>

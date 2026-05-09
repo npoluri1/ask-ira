@@ -4,7 +4,7 @@ from pathlib import Path
 import uvicorn
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
+from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 
 from src.api.middleware import RequestLoggingMiddleware
@@ -86,14 +86,7 @@ async def metrics():
 
 @app.get("/", tags=["System"])
 async def root():
-    return {
-        "service": "Ask IRA",
-        "version": "0.2.0",
-        "status": "running",
-        "docs": "/docs",
-        "health": "/health",
-        "metrics": "/metrics",
-    }
+    return RedirectResponse(url="/ui/")
 
 
 app.include_router(router)
