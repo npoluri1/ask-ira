@@ -45,7 +45,7 @@ def validate_config() -> None:
             else:
                 warnings.append(msg)
                 warnings.append(
-                    f"  → Sign up for a free key: see .env.example for links"
+                    "  → Sign up for a free key: see .env.example for links"
                 )
     elif provider in LOCAL_PROVIDERS:
         pass

@@ -18,13 +18,13 @@ class ResearcherAgent:
         self.cache = get_cache()
         self._rag: RAGPipeline | None = None
 
-    def _get_rag(self) -> RAGPipeline:
+    def _get_rag(self) -> RAGPipeline | None:
         if self._rag is None:
             try:
                 vs = VectorStore()
                 self._rag = RAGPipeline(vs)
             except Exception:
-                self._rag = RAGPipeline.__new__(RAGPipeline)
+                self._rag = None
         return self._rag
 
     async def research(self, query: str) -> dict:
@@ -38,12 +38,13 @@ class ResearcherAgent:
             summaries[name] = response.content
 
         rag_context = []
-        try:
-            rag = self._get_rag()
-            rag_docs = rag.retrieve(query, k=3)
-            rag_context = [doc.page_content for doc in rag_docs]
-        except Exception:
-            pass
+        rag = self._get_rag()
+        if rag is not None:
+            try:
+                rag_docs = rag.retrieve(query, k=3)
+                rag_context = [doc.page_content for doc in rag_docs]
+            except Exception:
+                pass
 
         context_parts = [f"[{k}]: {v}" for k, v in summaries.items()]
         if rag_context:

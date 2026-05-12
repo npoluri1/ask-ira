@@ -1,4 +1,3 @@
-import pytest
 
 from src.monitoring import get_health_status, get_metrics
 
@@ -18,3 +17,12 @@ def test_get_metrics():
     assert "total_requests" in metrics
     assert "total_errors" in metrics
     assert "uptime_seconds" in metrics
+
+
+def test_get_prometheus_metrics():
+    from src.monitoring import get_prometheus_metrics
+
+    prom_output = get_prometheus_metrics()
+    assert isinstance(prom_output, str)
+    assert len(prom_output) > 0
+    assert "ask_ira_" in prom_output

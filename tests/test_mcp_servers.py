@@ -1,7 +1,7 @@
 import pytest
 
-from src.mcp_servers.registry import MCPRegistry, create_app
 from src.mcp_servers.base import MCPRequest
+from src.mcp_servers.registry import MCPRegistry, create_app
 
 
 @pytest.fixture
@@ -43,6 +43,54 @@ async def test_base_mcp_request():
 async def test_base_mcp_request_defaults():
     req = MCPRequest(query="test")
     assert req.context is None
+
+
+@pytest.mark.asyncio
+async def test_enterprise_db_list_tables(registry):
+    server = registry.get_server("enterprise_db")
+    assert server is not None
+
+    req = MCPRequest(query="list tables", context=None)
+    result = await server.handle(req)
+    assert "companies" in result.content
+    assert "analysts" in result.content
+    assert "sectors" in result.content
+    assert "financials" in result.content
+
+
+@pytest.mark.asyncio
+async def test_enterprise_db_describe_table(registry):
+    server = registry.get_server("enterprise_db")
+    req = MCPRequest(query="describe companies", context=None)
+    result = await server.handle(req)
+    assert "companies" in result.content
+    assert "columns" in result.content or "ticker" in result.content
+    assert "row_count" in result.metadata or "columns" in result.metadata
+
+
+@pytest.mark.asyncio
+async def test_enterprise_db_query_table(registry):
+    server = registry.get_server("enterprise_db")
+    req = MCPRequest(query="query companies", context=None)
+    result = await server.handle(req)
+    assert "AAPL" in result.content
+    assert "MSFT" in result.content
+
+
+@pytest.mark.asyncio
+async def test_enterprise_db_sample(registry):
+    server = registry.get_server("enterprise_db")
+    req = MCPRequest(query="sample financials", context=None)
+    result = await server.handle(req)
+    assert "revenue" in result.content.lower() or "net_income" in result.content.lower()
+
+
+@pytest.mark.asyncio
+async def test_enterprise_db_unknown_query(registry):
+    server = registry.get_server("enterprise_db")
+    req = MCPRequest(query="do something random", context=None)
+    result = await server.handle(req)
+    assert "Enterprise DB tools" in result.content or "list tables" in result.content.lower()
 
 
 def test_create_app():

@@ -1,3 +1,5 @@
+from unittest.mock import patch
+
 import pytest
 
 from src.agents.graph import create_graph, run_ira
@@ -48,6 +50,29 @@ def test_agent_state_fields():
     assert state["next"] is None
 
 
+@pytest.mark.slow
+@pytest.mark.asyncio
+async def test_graph_human_review_approved():
+    graph = create_graph(memory=False, enable_human_review=True)
+    from src.agents.state import AgentState
+
+    state = AgentState(
+        query="test",
+        messages=[],
+        report="This is not financial advice. Past performance varies.",
+    )
+    result = await graph.ainvoke(state, {"configurable": {"thread_id": "test-hr-1"}})
+    assert result is not None
+
+
+@patch("src.agents.graph.configure_langsmith")
+def test_create_graph_with_langsmith(mock_configure):
+    graph = create_graph(memory=False)
+    assert graph is not None
+    mock_configure.assert_called_once()
+
+
+@pytest.mark.slow
 @pytest.mark.asyncio
 async def test_run_ira():
     result = await run_ira("Analyze AAPL briefly")

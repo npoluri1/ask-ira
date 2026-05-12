@@ -27,7 +27,7 @@ class CriticAgent:
         )
 
         result = await self.llm.ainvoke([
-            ("system", "You are a rigorous investment review committee member. Be constructive but thorough."),
+            ("system", "You are a rigorous investment review committee member. Be constructive but thorough."),  # noqa: E501
             ("human", prompt),
         ])
 

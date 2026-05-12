@@ -1,6 +1,5 @@
 from typing import Protocol
 
-from langchain_community.retrievers import BM25Retriever
 from langchain_core.documents import Document
 
 from src.rag.vector_store import VectorStore
@@ -14,12 +13,19 @@ class Retriever(Protocol):
 class HybridRetriever:
     def __init__(self, vector_store: VectorStore, docs: list[Document]):
         self.vector_store = vector_store
-        self.bm25 = BM25Retriever.from_documents(docs, k=5)
+        self.docs = docs or []
+        self.bm25 = None
+        if self.docs:
+            try:
+                from langchain_community.retrievers import BM25Retriever
+                self.bm25 = BM25Retriever.from_documents(self.docs, k=5)
+            except ImportError:
+                pass
         self.vector_retriever = vector_store.store.as_retriever(search_kwargs={"k": 5})
         self.weights = [0.3, 0.7]
 
     def retrieve(self, query: str, k: int = 5) -> list[Document]:
-        bm25_docs = self.bm25.invoke(query)
+        bm25_docs = self.bm25.invoke(query) if self.bm25 else []
         vector_docs = self.vector_retriever.invoke(query)
         return _weighted_merge([bm25_docs, vector_docs], self.weights)[:k]
 

@@ -13,10 +13,31 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-  <link rel="stylesheet" href="/ui/css/style.css">
+  <link rel="stylesheet" href="/ui/css/style.css?v=20260511">
 </head>
 <body>
-  <div id="app">
+  <!-- ===== LOGIN OVERLAY ===== -->
+  <div id="loginOverlay" class="login-overlay">
+    <div class="login-card">
+      <div class="login-header"><i class="fas fa-robot"></i><h2>Ask IRA</h2><p>AI-Powered Investment Platform</p></div>
+      <div class="login-tabs"><button class="tab-btn active" data-ltab="login">Sign In</button><button class="tab-btn" data-ltab="register">Register</button></div>
+      <div id="loginForm">
+        <div class="form-group"><label>Username</label><input type="text" id="loginUser" class="form-input" placeholder="admin or demo"></div>
+        <div class="form-group"><label>Password</label><input type="password" id="loginPass" class="form-input" placeholder="admin123 or demo123"></div>
+        <button id="loginBtn" class="btn btn-primary" style="width:100%;margin-top:8px"><i class="fas fa-sign-in-alt"></i> Sign In</button>
+        <div id="loginError" style="color:var(--down);font-size:12px;margin-top:8px;text-align:center"></div>
+      </div>
+      <div id="registerForm" style="display:none">
+        <div class="form-group"><label>Username</label><input type="text" id="regUser" class="form-input" placeholder="Choose a username"></div>
+        <div class="form-group"><label>Email</label><input type="email" id="regEmail" class="form-input" placeholder="your@email.com"></div>
+        <div class="form-group"><label>Password</label><input type="password" id="regPass" class="form-input" placeholder="Choose a password"></div>
+        <button id="registerBtn" class="btn btn-primary" style="width:100%;margin-top:8px"><i class="fas fa-user-plus"></i> Register</button>
+        <div id="registerError" style="color:var(--down);font-size:12px;margin-top:8px;text-align:center"></div>
+      </div>
+      <div style="margin-top:16px;text-align:center;font-size:11px;color:var(--text-muted)">Demo: admin / admin123 &bull; demo / demo123</div>
+    </div>
+  </div>
+  <div id="app" style="display:none">
     <!-- ===== SIDEBAR ===== -->
     <aside class="sidebar" id="sidebar">
       <div class="sidebar-header">
@@ -46,8 +67,16 @@
         <div class="nav-section-label">Account</div>
         <a href="#" class="nav-item" data-page="alerts"><i class="fas fa-bell"></i><span>Alerts</span></a>
         <a href="#" class="nav-item" data-page="settings"><i class="fas fa-cog"></i><span>Settings</span></a>
+        <div class="nav-section-label">Financial Services</div>
+        <a href="#" class="nav-item" data-page="banking"><i class="fas fa-university"></i><span>Banking</span></a>
+        <a href="#" class="nav-item" data-page="payments"><i class="fas fa-credit-card"></i><span>Payments</span></a>
+        <a href="#" class="nav-item" data-page="wallets"><i class="fas fa-wallet"></i><span>Wallets</span></a>
+        <a href="#" class="nav-item" data-page="insurance"><i class="fas fa-shield-virus"></i><span>Insurance</span></a>
+        <a href="#" class="nav-item" data-page="compliance"><i class="fas fa-gavel"></i><span>Compliance</span></a>
+        <a href="#" class="nav-item" data-page="security"><i class="fas fa-shield-alt"></i><span>Security</span></a>
       </nav>
       <div class="sidebar-footer">
+        <div id="userInfo" class="user-profile" style="padding:0 15px 8px;font-size:12px;display:flex;align-items:center;gap:6px;color:var(--text-secondary)"></div>
         <div class="connection-status" id="connStatus"><i class="fas fa-circle"></i><span>Connected</span></div>
         <small>Ask IRA · AI-Powered · Free Tier</small>
       </div>
@@ -62,6 +91,7 @@
         <div class="topbar-right">
           <button class="icon-btn" id="alertsBtn" title="Alerts"><i class="fas fa-bell"></i><span class="badge" id="alertBadge">3</span></button>
           <button class="icon-btn" id="refreshBtn" title="Refresh"><i class="fas fa-sync-alt"></i></button>
+          <span class="badge-standalone" id="dataSourceBadge">AI</span>
           <div class="clock" id="clock"></div>
         </div>
       </header>
@@ -179,6 +209,24 @@
         <section class="page" id="page-bonds">
           <div class="page-header"><h1><i class="fas fa-file-invoice"></i> Bonds & Fixed Income</h1></div>
           <div class="bonds-grid" id="bondsGrid"></div>
+        </section>
+
+        <!-- ===== FUNDS & ETFs ===== -->
+        <section class="page" id="page-funds">
+          <div class="page-header"><h1><i class="fas fa-piggy-bank"></i> Funds & ETFs</h1><span class="badge-lg">Mutual Funds · ETFs · Index Funds</span></div>
+          <div class="research-input-card">
+            <div class="input-group">
+              <input type="text" id="fundQuery" placeholder="Search funds (e.g., VTI, VOO, FNILX)" class="form-input">
+              <select id="fundType" class="form-select"><option value="all">All Types</option><option value="etf">ETF</option><option value="mutual_fund">Mutual Fund</option><option value="index">Index Fund</option></select>
+              <select id="fundMarket" class="form-select"><option value="US">🇺🇸 US</option><option value="IN">🇮🇳 India</option><option value="SG">🇸🇬 Singapore</option></select>
+              <button id="fundSearchBtn" class="btn btn-primary"><i class="fas fa-search"></i> Search</button>
+            </div>
+          </div>
+          <div id="fundResults"></div>
+          <div class="dashboard-grid">
+            <div class="card"><div class="card-header"><h3><i class="fas fa-fire"></i> Popular Funds</h3></div><div class="card-body" id="popularFunds"><div class="loader"></div></div></div>
+            <div class="card"><div class="card-header"><h3><i class="fas fa-chart-pie"></i> Fund Categories</h3></div><div class="card-body" id="fundCategories"><div class="loader"></div></div></div>
+          </div>
         </section>
 
         <!-- ===== OPTIONS & FUTURES ===== -->
@@ -335,6 +383,21 @@
                 <div class="form-group" style="margin-top:10px"><label>Default Market</label><select class="form-select"><option value="US">🇺🇸 USA</option><option value="IN">🇮🇳 India</option><option value="SG">🇸🇬 Singapore</option><option value="JP">🇯🇵 Japan</option><option value="GB">🇬🇧 UK</option></select></div>
               </div>
             </div>
+            <div class="card"><div class="card-header"><h3><i class="fas fa-database"></i> Data Source</h3></div>
+              <div class="card-body">
+                <p style="font-size:13px;color:var(--text-secondary);margin-bottom:12px">
+                  <span id="settingsDataSourceLabel">🤖 AI-Generated Market Data</span>
+                </p>
+                <p style="font-size:12px;color:var(--text-muted);margin-bottom:12px">
+                  AI algorithms generate realistic prices with optional yfinance live enrichment.
+                </p>
+                <div style="display:flex;gap:8px;align-items:center">
+                  <button class="btn btn-sm" id="toggleDataSourceBtn"><i class="fas fa-exchange-alt"></i> Toggle Mode</button>
+                  <span class="badge-standalone" id="settingsBadge" style="font-size:11px">AI</span>
+                </div>
+                <div id="settingsDsStatus" style="margin-top:8px;font-size:12px;color:var(--accent-green)"></div>
+              </div>
+            </div>
             <div class="card"><div class="card-header"><h3><i class="fas fa-info-circle"></i> About</h3></div>
               <div class="card-body">
                 <p style="font-size:13px;color:var(--text-secondary);line-height:1.6">
@@ -349,6 +412,100 @@
               </div>
             </div>
           </div>
+        </section>
+
+        <!-- ===== BANKING ===== -->
+        <section class="page" id="page-banking">
+          <div class="page-header"><h1><i class="fas fa-university"></i> Banking</h1><span class="badge-lg">Accounts · Transfers · Loans · Cards</span></div>
+          <div class="banking-tabs">
+            <button class="tab-btn active" data-btab="accounts">Accounts</button>
+            <button class="tab-btn" data-btab="transfers">Transfers</button>
+            <button class="tab-btn" data-btab="loans">Loans</button>
+            <button class="tab-btn" data-btab="deposits">Deposits</button>
+            <button class="tab-btn" data-btab="cards">Credit Cards</button>
+            <button class="tab-btn" data-btab="bills">Bills</button>
+          </div>
+          <div id="bankingAccounts" class="dashboard-grid"></div>
+          <div id="bankingTransfers" class="dashboard-grid" style="display:none"></div>
+          <div id="bankingLoans" class="dashboard-grid" style="display:none"></div>
+          <div id="bankingDeposits" class="dashboard-grid" style="display:none"></div>
+          <div id="bankingCards" class="dashboard-grid" style="display:none"></div>
+          <div id="bankingBills" class="dashboard-grid" style="display:none"></div>
+        </section>
+
+        <!-- ===== PAYMENTS ===== -->
+        <section class="page" id="page-payments">
+          <div class="page-header"><h1><i class="fas fa-credit-card"></i> Payments</h1><span class="badge-lg">SWIFT · SEPA · ACH · Faster Payments</span></div>
+          <div class="payments-tabs">
+            <button class="tab-btn active" data-ptab="all">All Payments</button>
+            <button class="tab-btn" data-ptab="swift">SWIFT</button>
+            <button class="tab-btn" data-ptab="sepa">SEPA</button>
+            <button class="tab-btn" data-ptab="ach">ACH</button>
+            <button class="tab-btn" data-ptab="faster">Faster</button>
+          </div>
+          <div id="paymentsList" class="card"><div class="card-body"><div class="loader"></div></div></div>
+        </section>
+
+        <!-- ===== INSURANCE ===== -->
+        <section class="page" id="page-insurance">
+          <div class="page-header"><h1><i class="fas fa-shield-virus"></i> Insurance</h1><span class="badge-lg">Policies · Claims · Premiums</span></div>
+          <div class="insurance-tabs">
+            <button class="tab-btn active" data-itab="policies">Policies</button>
+            <button class="tab-btn" data-itab="claims">Claims</button>
+            <button class="tab-btn" data-itab="premiums">Premiums</button>
+          </div>
+          <div id="insurancePolicies" class="dashboard-grid"></div>
+          <div id="insuranceClaims" class="dashboard-grid" style="display:none"></div>
+          <div id="insurancePremiums" class="dashboard-grid" style="display:none"></div>
+        </section>
+
+        <!-- ===== WALLETS ===== -->
+        <section class="page" id="page-wallets">
+          <div class="page-header"><h1><i class="fas fa-wallet"></i> Wallets</h1><span class="badge-lg">Banking · Crypto · Insurance</span></div>
+          <div class="wallets-tabs">
+            <button class="tab-btn active" data-wtab="banking">Banking</button>
+            <button class="tab-btn" data-wtab="crypto">Crypto</button>
+            <button class="tab-btn" data-wtab="insurance">Insurance</button>
+          </div>
+          <div id="walletsBanking" class="dashboard-grid"></div>
+          <div id="walletsCrypto" class="dashboard-grid" style="display:none"></div>
+          <div id="walletsInsurance" class="dashboard-grid" style="display:none"></div>
+        </section>
+
+        <!-- ===== COMPLIANCE ===== -->
+        <section class="page" id="page-compliance">
+          <div class="page-header"><h1><i class="fas fa-gavel"></i> Compliance</h1><span class="badge-lg">AML · KYC · Sanctions · Reporting</span></div>
+          <div class="compliance-tabs">
+            <button class="tab-btn active" data-ctab="aml">AML Screening</button>
+            <button class="tab-btn" data-ctab="kyc">KYC</button>
+            <button class="tab-btn" data-ctab="sanctions">Sanctions</button>
+            <button class="tab-btn" data-ctab="countries">Country Rules</button>
+            <button class="tab-btn" data-ctab="reporting">Reporting</button>
+          </div>
+          <div id="complianceAml" class="card"><div class="card-body"><div class="loader"></div></div></div>
+          <div id="complianceKyc" class="card" style="display:none"><div class="card-body"><div class="loader"></div></div></div>
+          <div id="complianceSanctions" class="card" style="display:none"><div class="card-body"><div class="loader"></div></div></div>
+          <div id="complianceCountries" class="card" style="display:none"><div class="card-body"><div class="loader"></div></div></div>
+          <div id="complianceReporting" class="card" style="display:none"><div class="card-body"><div class="loader"></div></div></div>
+        </section>
+
+        <!-- ===== SECURITY ===== -->
+        <section class="page" id="page-security">
+          <div class="page-header"><h1><i class="fas fa-shield-alt"></i> Security</h1><span class="badge-lg">WAF · IDS · SIEM · DDoS · Threat Intel</span></div>
+          <div class="security-tabs">
+            <button class="tab-btn active" data-stab="overview">Overview</button>
+            <button class="tab-btn" data-stab="waf">WAF</button>
+            <button class="tab-btn" data-stab="ids">IDS</button>
+            <button class="tab-btn" data-stab="siem">SIEM</button>
+            <button class="tab-btn" data-stab="ddos">DDoS</button>
+            <button class="tab-btn" data-stab="scan">Scanner</button>
+          </div>
+          <div id="securityOverview" class="dashboard-grid"></div>
+          <div id="securityWaf" class="card" style="display:none"><div class="card-body"><div class="loader"></div></div></div>
+          <div id="securityIds" class="card" style="display:none"><div class="card-body"><div class="loader"></div></div></div>
+          <div id="securitySiem" class="card" style="display:none"><div class="card-body"><div class="loader"></div></div></div>
+          <div id="securityDdos" class="card" style="display:none"><div class="card-body"><div class="loader"></div></div></div>
+          <div id="securityScan" class="card" style="display:none"><div class="card-body"><div class="loader"></div></div></div>
         </section>
       </div>
     </main>
@@ -389,8 +546,8 @@
     </div>
   </div>
 
-  <script src="/ui/js/api.js"></script>
-  <script src="/ui/js/app.js"></script>
+  <script src="/ui/js/api.js?v=20260511"></script>
+  <script src="/ui/js/app.js?v=20260511"></script>
   <script>if ('serviceWorker' in navigator) { navigator.serviceWorker.register('/ui/sw.js').catch(() => {}); }</script>
 </body>
 </html>

@@ -1,3 +1,4 @@
+from typing import Any
 from pydantic import BaseModel
 
 
@@ -11,7 +12,7 @@ class QueryRequest(BaseModel):
 class QueryResponse(BaseModel):
     report: str
     analysis: str | None = None
-    mcp_results: dict[str, str] | None = None
+    mcp_results: dict[str, Any] | None = None
     portfolio_allocation: dict | None = None
     risk_assessment: str | None = None
     confidence: float | None = None

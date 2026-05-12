@@ -1,13 +1,12 @@
-import pytest
 
 from src.config import get_settings
-from src.config.validation import validate_config
 from src.config.prompts import (
-    RESEARCH_TASK_TEMPLATE,
     ANALYSIS_TASK_TEMPLATE,
-    WRITING_TASK_TEMPLATE,
+    RESEARCH_TASK_TEMPLATE,
     REVIEW_TASK_TEMPLATE,
+    WRITING_TASK_TEMPLATE,
 )
+from src.config.validation import validate_config
 
 
 def test_settings_defaults():

@@ -12,11 +12,9 @@ def client():
 
 @pytest.mark.asyncio
 async def test_root_endpoint(client):
-    response = await client.get("/")
-    assert response.status_code == 200
-    data = response.json()
-    assert data["service"] == "Ask IRA"
-    assert data["version"] == "0.2.0"
+    response = await client.get("/", follow_redirects=False)
+    assert response.status_code == 307
+    assert response.headers.get("location") == "/ui/"
 
 
 @pytest.mark.asyncio
@@ -44,6 +42,7 @@ async def test_docs_redirect(client):
     assert response.status_code == 200
 
 
+@pytest.mark.slow
 @pytest.mark.asyncio
 async def test_query_endpoint(client):
     response = await client.post(
@@ -56,6 +55,7 @@ async def test_query_endpoint(client):
     assert data["session_id"] == "test-session"
 
 
+@pytest.mark.slow
 @pytest.mark.asyncio
 async def test_query_endpoint_with_risk_profile(client):
     response = await client.post(
@@ -71,6 +71,7 @@ async def test_query_endpoint_with_risk_profile(client):
     assert "report" in data
 
 
+@pytest.mark.slow
 @pytest.mark.asyncio
 async def test_sse_streaming_endpoint(client):
     response = await client.post(
@@ -81,6 +82,7 @@ async def test_sse_streaming_endpoint(client):
     assert "text/event-stream" in response.headers["content-type"]
 
 
+@pytest.mark.slow
 @pytest.mark.asyncio
 async def test_query_endpoint_no_session(client):
     response = await client.post(

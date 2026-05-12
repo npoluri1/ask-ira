@@ -79,6 +79,13 @@ class Settings(BaseSettings):
     cache_ttl_rag: int = 600
 
     # =========================================================================
+    # DATA SOURCE
+    # =========================================================================
+    # "realtime" — fetches live data from yfinance, FRED, Yahoo News APIs
+    # "seed"     — uses local JSON seed data files (no internet needed)
+    data_source: str = "realtime"
+
+    # =========================================================================
     # SECURITY
     # =========================================================================
     cors_origins: str = "*"
@@ -86,6 +93,38 @@ class Settings(BaseSettings):
     rate_limit_window: int = 60
     enable_websocket: bool = True
     enable_human_review: bool = False
+    jwt_secret: str = ""
+    jwt_algorithm: str = "HS256"
+    jwt_expire_minutes: int = 60
+    mfa_enabled: bool = True
+    session_timeout_minutes: int = 60
+    max_login_attempts: int = 5
+    password_min_length: int = 8
+
+    # =========================================================================
+    # COMPLIANCE
+    # =========================================================================
+    default_compliance_country: str = "US"
+    sar_auto_filing: bool = False
+    aml_screening_enabled: bool = True
+    data_retention_days: int = 1825
+    kyc_required_level: int = 1
+
+    # =========================================================================
+    # ENTERPRISE
+    # =========================================================================
+    multi_tenant_enabled: bool = False
+    max_users_per_tenant: int = 100
+    tenant_isolation: str = "database"
+    enterprise_batch_max: int = 10000
+
+    # =========================================================================
+    # NOTIFICATIONS
+    # =========================================================================
+    email_enabled: bool = False
+    sms_enabled: bool = False
+    push_enabled: bool = True
+    notification_provider: str = "internal"
 
     model_config = {"env_file": ".env", "env_file_encoding": "utf-8", "extra": "ignore"}
 

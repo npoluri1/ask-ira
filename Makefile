@@ -25,8 +25,11 @@ format: ## Format code with ruff
 typecheck: ## Run mypy type checker
 	mypy src/ --ignore-missing-imports --warn-unused-ignores || true
 
-test: ## Run tests with coverage
-	pytest tests/ -v --cov=src --cov-report=term --cov-report=html --timeout=60
+test: ## Run unit tests (skips slow integration tests that call real LLMs)
+	pytest tests/ -v -m "not slow" --cov=src --cov-report=term --cov-report=html --timeout=60
+
+test-all: ## Run all tests including slow integration tests
+	pytest tests/ -v -m "slow" --timeout=180
 
 audit: ## Audit dependencies for vulnerabilities
 	pip-audit --strict --progress-spinner=off

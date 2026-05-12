@@ -35,7 +35,7 @@ class RiskAssessorAgent:
         )
 
         result = await self.llm.ainvoke([
-            ("system", "You are a chief risk officer at an investment firm. Be quantitative and precise."),
+            ("system", "You are a chief risk officer at an investment firm. Be quantitative and precise."),  # noqa: E501
             ("human", prompt),
         ])
 

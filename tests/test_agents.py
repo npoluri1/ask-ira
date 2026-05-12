@@ -1,5 +1,4 @@
 import pytest
-from langchain_core.messages import HumanMessage
 
 from src.guardrails.input import InputGuardrails
 from src.guardrails.output import OutputGuardrails

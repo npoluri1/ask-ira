@@ -40,7 +40,7 @@ class PortfolioManagerAgent:
         )
 
         result = await self.llm.ainvoke([
-            ("system", "You are a professional portfolio manager. Output structured portfolio allocations."),
+            ("system", "You are a professional portfolio manager. Output structured portfolio allocations."),  # noqa: E501
             ("human", prompt),
         ])
 

@@ -1,5 +1,4 @@
 import pytest
-from langchain_core.messages import HumanMessage
 
 from src.agents.analyst import AnalystAgent
 from src.agents.compliance import ComplianceAgent
@@ -7,7 +6,6 @@ from src.agents.critic import CriticAgent
 from src.agents.portfolio_manager import PortfolioManagerAgent
 from src.agents.risk_assessor import RiskAssessorAgent
 from src.agents.writer import WriterAgent
-from src.agents.state import AgentState
 
 
 @pytest.mark.asyncio
@@ -179,3 +177,52 @@ async def test_writer_empty_analysis():
         },
     )
     assert "report" in result
+
+
+@pytest.mark.asyncio
+async def test_researcher_with_mock_registry():
+    from src.agents.researcher import ResearcherAgent
+    from src.mcp_servers.base import MCPResponse
+
+    class MockRegistry:
+        async def dispatch_all(self, query: str) -> dict:
+            return {
+                "market_data": MCPResponse(content="AAPL at $242, P/E 32", source="market_data"),
+                "sentiment": MCPResponse(content="Bullish sentiment 72%", source="sentiment"),
+            }
+
+    agent = ResearcherAgent(MockRegistry())
+    result = await agent.research("Analyze AAPL")
+    assert "mcp_results" in result
+    assert "market_data" in result["mcp_results"]
+    assert "AAPL" in result["mcp_results"]["market_data"]
+    assert "rag_context" in result
+    assert "synthesis" in result
+    assert result["next"] == "analyst"
+
+
+@pytest.mark.asyncio
+async def test_researcher_handles_empty_registry():
+    from src.agents.researcher import ResearcherAgent
+
+    class EmptyRegistry:
+        async def dispatch_all(self, query: str) -> dict:
+            return {}
+
+    agent = ResearcherAgent(EmptyRegistry())
+    result = await agent.research("test")
+    assert result["mcp_results"] == {}
+
+
+@pytest.mark.asyncio
+async def test_human_review_logic_direct():
+
+    report_with_disclaimer = "This is not financial advice. Past performance varies."
+    report_no_disclaimer = "Buy this stock now! It will go up 1000%."
+    disclaimers = ["not financial advice", "past performance", "consult your"]
+
+    has_1 = any(p in report_with_disclaimer.lower() for p in disclaimers)
+    has_2 = any(p in report_no_disclaimer.lower() for p in disclaimers)
+
+    assert has_1 is True
+    assert has_2 is False

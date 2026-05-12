@@ -47,7 +47,7 @@ class ComplianceAgent:
                 })
 
         result = await self.llm.ainvoke([
-            ("system", "You are a financial compliance officer. Identify any regulatory issues in this research report."),
+            ("system", "You are a financial compliance officer. Identify regulatory issues in this report."),  # noqa: E501
             ("human", f"Review this report for compliance issues:\n\n{report[:3000]}"),
         ])
 

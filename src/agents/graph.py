@@ -15,6 +15,7 @@ from src.config import get_settings
 from src.guardrails.input import InputGuardrails
 from src.guardrails.output import OutputGuardrails
 from src.mcp_servers.registry import MCPRegistry
+from src.utils.callbacks import configure_langsmith
 
 settings = get_settings()
 
@@ -24,6 +25,7 @@ def create_graph(
     memory: bool = True,
     enable_human_review: bool = False,
 ) -> StateGraph:
+    configure_langsmith()
     registry = mcp_registry or MCPRegistry()
     supervisor = SupervisorAgent(registry)
     researcher = ResearcherAgent(registry)
@@ -105,7 +107,7 @@ def create_graph(
         result = await compliance.check(report)
         return {
             "compliance_result": result,
-            "next": "human_review" if (enable_human_review and settings.enable_human_review) else "guard_output",
+            "next": "human_review" if (enable_human_review or settings.enable_human_review) else "guard_output",  # noqa: E501
         }
 
     async def build_portfolio(state: AgentState) -> dict:
