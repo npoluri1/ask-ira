@@ -1,0 +1,8 @@
+pyproject.toml
+.venv
+__pycache__
+*.pyc
+data
+notebooks
+*.db
+*.log
