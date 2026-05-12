@@ -1,4 +1,5 @@
 {
+  "installCommand": "echo 'Node.js only — no deps needed'",
   "outputDirectory": "src/static",
   "rewrites": [
     { "source": "/ui/(.*)", "destination": "/$1" },
