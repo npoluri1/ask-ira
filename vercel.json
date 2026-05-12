@@ -1,3 +1,8 @@
 {
-  "installCommand": "pip install fastapi httpx python-multipart"
+  "installCommand": "pip install fastapi httpx python-multipart",
+  "outputDirectory": "src/static",
+  "rewrites": [
+    { "source": "/ui/(.*)", "destination": "/$1" },
+    { "source": "/ui", "destination": "/" }
+  ]
 }
