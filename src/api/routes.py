@@ -133,22 +133,31 @@ async def query(request: QueryRequest):
 @router.get("/insights/{section}")
 async def get_insights(section: str):
     topics = {
-        "dashboard": "Global market overview and key trends for today",
-        "stocks": "Stock market analysis and top picks",
-        "indices": "Major index performance and market direction",
-        "forex": "Foreign exchange market movements and outlook",
-        "crypto": "Cryptocurrency market analysis and trends",
-        "commodities": "Commodity prices and supply-demand dynamics",
-        "bonds": "Bond market yields and fixed income analysis",
-        "funds": "Mutual funds and ETF performance analysis",
-        "economy": "Economic indicators and macroeconomic outlook",
+        "dashboard": "Global market overview and key trends for today with major indices performance summary",
+        "stocks": "Stock market analysis and top picks for today's trading session",
+        "indices": "Major index performance analysis and overall market direction for the day",
+        "forex": "Foreign exchange market major pair movements and short-term outlook",
+        "crypto": "Cryptocurrency market analysis, top coin movements and emerging trends",
+        "commodities": "Commodity prices overview including gold, oil and supply-demand dynamics",
+        "bonds": "Bond market yields analysis and fixed income investment outlook",
+        "funds": "Mutual funds and ETF performance analysis with sector rotation insights",
+        "economy": "Key economic indicators and macroeconomic outlook for the quarter",
     }
     query = topics.get(section, f"Market analysis for {section}")
     try:
-        fallback = generate_fallback_report(query, "moderate")
-        return {"insight": fallback.get("report", "")[:500], "confidence": fallback.get("confidence", 0.7), "updatedAt": time.strftime("%Y-%m-%d %H:%M:%S UTC")}
+        graph = _get_graph(f"insight-{section}")
+        config = {"configurable": {"thread_id": f"insight-{section}"}}
+        state = _build_initial_state(query, f"insight-{section}", "moderate")
+        result = await graph.ainvoke(state, config)
+        combined = result.get("report") or result.get("analysis") or ""
+        return {"insight": combined[:600], "confidence": result.get("confidence", 0.7), "updatedAt": time.strftime("%Y-%m-%d %H:%M:%S UTC")}
     except Exception as e:
-        return {"insight": f"AI insights temporarily unavailable for {section}.", "confidence": 0, "updatedAt": time.strftime("%Y-%m-%d %H:%M:%S UTC")}
+        logger.warning("Insights LLM failed for %s: %s, using fallback", section, e)
+        try:
+            fallback = generate_fallback_report(query, "moderate")
+            return {"insight": fallback.get("report", "")[:500], "confidence": fallback.get("confidence", 0.5), "updatedAt": time.strftime("%Y-%m-%d %H:%M:%S UTC")}
+        except Exception:
+            return {"insight": f"AI insights temporarily unavailable for {section}.", "confidence": 0, "updatedAt": time.strftime("%Y-%m-%d %H:%M:%S UTC")}
 
 
 @router.post("/query/stream")

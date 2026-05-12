@@ -197,12 +197,16 @@ function initMobile() {
 }
 
 let sseSource = null;
+let sseRetries = 0;
+const SSE_MAX_RETRIES = 20;
 function initSSE() {
   if (sseSource) { sseSource.close(); }
+  if (sseRetries >= SSE_MAX_RETRIES) { console.warn('SSE max retries reached'); return; }
   sseSource = new EventSource('/api/v1/market/live');
   sseSource.onmessage = (event) => {
     try {
       const msg = JSON.parse(event.data);
+      sseRetries = 0;
       switch (msg.type) {
         case 'indices':
           CACHE.indices = (msg.data || []).map(i => ({ name: i.name || i.symbol, symbol: i.symbol, price: i.price, change: i.changePercent, high: i.high, low: i.low, volume: fmt(i.volume, 0), market: 'Global' }));
@@ -243,7 +247,10 @@ function initSSE() {
   };
   sseSource.onerror = () => {
     sseSource.close();
-    setTimeout(initSSE, 5000);
+    sseRetries++;
+    const delay = Math.min(1000 * Math.pow(2, sseRetries), 30000);
+    console.warn(`SSE disconnected, retry ${sseRetries}/${SSE_MAX_RETRIES} in ${delay}ms`);
+    setTimeout(initSSE, delay);
   };
 }
 
@@ -718,11 +725,11 @@ function renderBanking() {
     $$('.tab-btn[data-btab]').forEach(x => x.classList.remove('active')); b.classList.add('active');
     const tab = b.dataset.btab;
     ['accounts','transfers','loans','deposits','cards','bills'].forEach(t => $(`#banking${t.charAt(0).toUpperCase()+t.slice(1)}`).style.display = t === tab ? 'grid' : 'none');
-    if (tab === 'transfers') API.getTransfers().then(d => { if (d?.data) $(`#bankingTransfers`).innerHTML = `<div class="card card-2col"><div class="card-header"><h3>Transfers</h3></div><div class="card-body"><pre>${JSON.stringify(d.data, null, 2)}</pre></div></div>`; });
-    if (tab === 'loans') API.getLoans().then(d => { if (d?.data) $(`#bankingLoans`).innerHTML = `<div class="card card-2col"><div class="card-header"><h3>Loans</h3></div><div class="card-body"><pre>${JSON.stringify(d.data, null, 2)}</pre></div></div>`; });
-    if (tab === 'deposits') API.getDeposits().then(d => { if (d?.data) $(`#bankingDeposits`).innerHTML = `<div class="card card-2col"><div class="card-header"><h3>Deposits</h3></div><div class="card-body"><pre>${JSON.stringify(d.data, null, 2)}</pre></div></div>`; });
-    if (tab === 'cards') API.getCreditCards().then(d => { if (d?.data) $(`#bankingCards`).innerHTML = `<div class="card card-2col"><div class="card-header"><h3>Credit Cards</h3></div><div class="card-body"><pre>${JSON.stringify(d.data, null, 2)}</pre></div></div>`; });
-    if (tab === 'bills') API.getBills().then(d => { if (d?.data) $(`#bankingBills`).innerHTML = `<div class="card card-2col"><div class="card-header"><h3>Bills</h3></div><div class="card-body"><pre>${JSON.stringify(d.data, null, 2)}</pre></div></div>`; });
+    if (tab === 'transfers') API.getTransfers().then(d => { if (d?.data) $(`#bankingTransfers`).innerHTML = `<div class="card card-2col"><div class="card-header"><h3><i class="fas fa-exchange-alt"></i> Transfers</h3></div><div class="card-body"><table class="table"><thead><tr><th>From</th><th>To</th><th>Amount</th><th>Currency</th><th>Status</th></tr></thead><tbody>${d.data.slice(0,20).map(t => `<tr><td>${t.from_account||'N/A'}</td><td>${t.to_account||'N/A'}</td><td>${fmtUSD(t.amount||0)}</td><td>${t.currency||'USD'}</td><td><span class="badge ${t.status==='completed'?'badge-green':'badge-yellow'}">${t.status||'pending'}</span></td></tr>`).join('')}</tbody></table></div></div>`; });
+    if (tab === 'loans') API.getLoans().then(d => { if (d?.data) $(`#bankingLoans`).innerHTML = `<div class="card card-2col"><div class="card-header"><h3><i class="fas fa-hand-holding-usd"></i> Loans</h3></div><div class="card-body"><table class="table"><thead><tr><th>Type</th><th>Amount</th><th>Term</th><th>Rate</th><th>Monthly</th><th>Status</th></tr></thead><tbody>${d.data.slice(0,20).map(l => `<tr><td>${(l.loan_type||'').replace('_',' ').toUpperCase()}</td><td>${fmtUSD(l.amount||0)}</td><td>${l.term_months||0}mo</td><td>${(l.interest_rate||0)*100}%</td><td>${fmtUSD(l.monthly_payment||0)}</td><td><span class="badge ${l.status==='active'?'badge-green':'badge-gray'}">${l.status||'active'}</span></td></tr>`).join('')}</tbody></table></div></div>`; });
+    if (tab === 'deposits') API.getDeposits().then(d => { if (d?.data) $(`#bankingDeposits`).innerHTML = `<div class="card card-2col"><div class="card-header"><h3><i class="fas fa-piggy-bank"></i> Deposits</h3></div><div class="card-body"><table class="table"><thead><tr><th>Type</th><th>Amount</th><th>Term</th><th>Rate</th><th>Maturity</th><th>Status</th></tr></thead><tbody>${d.data.slice(0,20).map(dp => `<tr><td>${(dp.deposit_type||'').replace('_',' ').toUpperCase()}</td><td>${fmtUSD(dp.amount||0)}</td><td>${dp.term_months||0}mo</td><td>${((dp.interest_rate||0)*100).toFixed(1)}%</td><td>${fmtUSD(dp.maturity_amount||0)}</td><td><span class="badge badge-green">${dp.status||'active'}</span></td></tr>`).join('')}</tbody></table></div></div>`; });
+    if (tab === 'cards') API.getCreditCards().then(d => { if (d?.data) $(`#bankingCards`).innerHTML = `<div class="card card-2col"><div class="card-header"><h3><i class="fas fa-credit-card"></i> Credit Cards</h3></div><div class="card-body"><table class="table"><thead><tr><th>Card</th><th>Limit</th><th>Used</th><th>Available</th><th>APR</th><th>Status</th></tr></thead><tbody>${d.data.slice(0,20).map(c => `<tr><td>****${(c.card_number||'').slice(-4)}</td><td>${fmtUSD(c.credit_limit||0)}</td><td>${fmtUSD(c.balance||0)}</td><td>${fmtUSD((c.credit_limit||0)-(c.balance||0))}</td><td>${(c.apr||0).toFixed(1)}%</td><td><span class="badge badge-green">${c.status||'active'}</span></td></tr>`).join('')}</tbody></table></div></div>`; });
+    if (tab === 'bills') API.getBills().then(d => { if (d?.data) $(`#bankingBills`).innerHTML = `<div class="card card-2col"><div class="card-header"><h3><i class="fas fa-file-invoice"></i> Bills</h3></div><div class="card-body"><table class="table"><thead><tr><th>Provider</th><th>Type</th><th>Amount</th><th>Due</th><th>Status</th></tr></thead><tbody>${d.data.slice(0,20).map(b => `<tr><td>${b.provider||'N/A'}</td><td>${(b.bill_type||'').replace('_',' ').toUpperCase()}</td><td>${fmtUSD(b.amount||0)}</td><td>${b.due_date||'N/A'}</td><td><span class="badge ${b.status==='paid'?'badge-green':'badge-yellow'}">${b.status||'unpaid'}</span></td></tr>`).join('')}</tbody></table></div></div>`; });
   }));
 }
 
@@ -737,10 +744,10 @@ function renderPayments() {
   $$('.tab-btn[data-ptab]').forEach(b => b.addEventListener('click', () => {
     $$('.tab-btn[data-ptab]').forEach(x => x.classList.remove('active')); b.classList.add('active');
     const tab = b.dataset.ptab;
-    if (tab === 'swift') API.getSwiftBanks().then(d => { if (d) list.innerHTML = `<div class="card-header"><h3>SWIFT Participating Banks</h3></div><div class="card-body"><pre>${JSON.stringify(d, null, 2)}</pre></div>`; });
-    if (tab === 'sepa') API.getSepaMandates().then(d => { if (d) list.innerHTML = `<div class="card-header"><h3>SEPA Mandates</h3></div><div class="card-body"><pre>${JSON.stringify(d, null, 2)}</pre></div>`; });
-    if (tab === 'ach') API.getAchRoutes().then(d => { if (d) list.innerHTML = `<div class="card-header"><h3>ACH Routes</h3></div><div class="card-body"><pre>${JSON.stringify(d, null, 2)}</pre></div>`; });
-    if (tab === 'faster') API.getFasterPayments().then(d => { if (d) list.innerHTML = `<div class="card-header"><h3>Faster Payments Limits</h3></div><div class="card-body"><pre>${JSON.stringify(d, null, 2)}</pre></div>`; });
+    if (tab === 'swift') API.getSwiftBanks().then(d => { if (d?.data) list.innerHTML = `<div class="card"><div class="card-header"><h3><i class="fas fa-globe"></i> SWIFT Participating Banks</h3></div><div class="card-body"><table class="table"><thead><tr><th>Bank</th><th>BIC</th><th>Country</th><th>City</th></tr></thead><tbody>${(d.data||d).slice(0,20).map(b => `<tr><td>${b.name||''}</td><td><code>${b.bic||''}</code></td><td>${b.country||''}</td><td>${b.city||''}</td></tr>`).join('')}</tbody></table></div></div>`; });
+    if (tab === 'sepa') API.getSepaMandates().then(d => { if (d?.data) list.innerHTML = `<div class="card"><div class="card-header"><h3><i class="fas fa-file-signature"></i> SEPA Mandates</h3></div><div class="card-body"><table class="table"><thead><tr><th>Creditor</th><th>IBAN</th><th>BIC</th><th>Status</th></tr></thead><tbody>${(d.data||d).slice(0,20).map(m => `<tr><td>${m.creditor_name||''}</td><td><code>${(m.creditor_iban||'').slice(0,8)}...</code></td><td><code>${m.creditor_bic||''}</code></td><td><span class="badge badge-green">${m.status||'active'}</span></td></tr>`).join('')}</tbody></table></div></div>`; });
+    if (tab === 'ach') API.getAchRoutes().then(d => { if (d?.data) list.innerHTML = `<div class="card"><div class="card-header"><h3><i class="fas fa-route"></i> ACH Routes</h3></div><div class="card-body"><table class="table"><thead><tr><th>Bank</th><th>Routing #</th><th>Account Type</th><th>Status</th></tr></thead><tbody>${(d.data||d).slice(0,20).map(r => `<tr><td>${r.bank_name||''}</td><td><code>${r.routing_number||''}</code></td><td>${(r.account_type||'').toUpperCase()}</td><td><span class="badge badge-green">${r.status||'active'}</span></td></tr>`).join('')}</tbody></table></div></div>`; });
+    if (tab === 'faster') API.getFasterPayments().then(d => { if (d?.data) list.innerHTML = `<div class="card"><div class="card-header"><h3><i class="fas fa-bolt"></i> Faster Payments Limits</h3></div><div class="card-body"><pre>${JSON.stringify(d.data||d, null, 2)}</pre></div></div>`; });
     if (tab === 'all') renderPayments();
   }));
 }
@@ -748,15 +755,15 @@ function renderPayments() {
 function renderWallets() {
   const bDiv = $('#walletsBanking'); if (!bDiv) return;
   API.getBankingWallets().then(d => {
-    if (d?.wallets) bDiv.innerHTML = `<div class="card card-2col"><div class="card-header"><h3>Banking Wallets</h3></div><div class="card-body"><pre>${JSON.stringify(d.wallets, null, 2)}</pre></div></div>`;
+    if (d?.wallets) bDiv.innerHTML = `<div class="card card-2col"><div class="card-header"><h3><i class="fas fa-wallet"></i> Banking Wallets</h3></div><div class="card-body"><table class="table"><thead><tr><th>Wallet</th><th>Currency</th><th>Balance</th><th>Features</th></tr></thead><tbody>${d.wallets.slice(0,20).map(w => `<tr><td>${w.wallet_name||w.wallet_id?.slice(0,8)}</td><td>${w.currency||'USD'}</td><td>${fmtUSD(w.balance||0)}</td><td>${(w.features||[]).join(', ')||'N/A'}</td></tr>`).join('')}</tbody></table></div></div>`;
     else bDiv.innerHTML = '<div class="card"><div class="card-body"><p class="text-center">No banking wallets</p></div></div>';
   });
   $$('.tab-btn[data-wtab]').forEach(b => b.addEventListener('click', () => {
     $$('.tab-btn[data-wtab]').forEach(x => x.classList.remove('active')); b.classList.add('active');
     const tab = b.dataset.wtab;
     ['banking','crypto','insurance'].forEach(t => $(`#wallets${t.charAt(0).toUpperCase()+t.slice(1)}`).style.display = t === tab ? 'grid' : 'none');
-    if (tab === 'crypto') API.getCryptoWallets().then(d => { if (d?.wallets) $(`#walletsCrypto`).innerHTML = `<div class="card card-2col"><div class="card-header"><h3>Crypto Wallets</h3></div><div class="card-body"><pre>${JSON.stringify(d.wallets, null, 2)}</pre></div></div>`; });
-    if (tab === 'insurance') API.getInsuranceWallets().then(d => { if (d?.wallets) $(`#walletsInsurance`).innerHTML = `<div class="card card-2col"><div class="card-header"><h3>Insurance Wallets</h3></div><div class="card-body"><pre>${JSON.stringify(d.wallets, null, 2)}</pre></div></div>`; });
+    if (tab === 'crypto') API.getCryptoWallets().then(d => { if (d?.wallets) $(`#walletsCrypto`).innerHTML = `<div class="card card-2col"><div class="card-header"><h3><i class="fab fa-bitcoin"></i> Crypto Wallets</h3></div><div class="card-body"><table class="table"><thead><tr><th>Name</th><th>Currency</th><th>Balance</th><th>Address</th></tr></thead><tbody>${d.wallets.slice(0,20).map(w => `<tr><td>${w.wallet_name||'Wallet'}</td><td>${w.currency||'BTC'}</td><td>${(w.balance||0).toFixed(8)}</td><td><code>${(w.address||'').slice(0,12)}...</code></td></tr>`).join('')}</tbody></table></div></div>`; });
+    if (tab === 'insurance') API.getInsuranceWallets().then(d => { if (d?.wallets) $(`#walletsInsurance`).innerHTML = `<div class="card card-2col"><div class="card-header"><h3><i class="fas fa-shield-alt"></i> Insurance Wallets</h3></div><div class="card-body"><table class="table"><thead><tr><th>Name</th><th>Balance</th><th>Type</th></tr></thead><tbody>${d.wallets.slice(0,20).map(w => `<tr><td>${w.wallet_name||'Wallet'}</td><td>${fmtUSD(w.balance||0)}</td><td>${w.policy_type||'N/A'}</td></tr>`).join('')}</tbody></table></div></div>`; });
   }));
 }
 
@@ -770,29 +777,29 @@ function renderInsurance() {
     $$('.tab-btn[data-itab]').forEach(x => x.classList.remove('active')); b.classList.add('active');
     const tab = b.dataset.itab;
     ['policies','claims','premiums'].forEach(t => $(`#insurance${t.charAt(0).toUpperCase()+t.slice(1)}`).style.display = t === tab ? 'grid' : 'none');
-    if (tab === 'claims') API.getInsuranceClaims().then(d => { if (d?.data) $(`#insuranceClaims`).innerHTML = `<div class="card card-2col"><div class="card-header"><h3>Claims</h3></div><div class="card-body"><pre>${JSON.stringify(d.data, null, 2)}</pre></div></div>`; });
-    if (tab === 'premiums') API.getInsurancePremiums().then(d => { if (d?.data) $(`#insurancePremiums`).innerHTML = `<div class="card card-2col"><div class="card-header"><h3>Premiums</h3></div><div class="card-body"><pre>${JSON.stringify(d.data, null, 2)}</pre></div></div>`; });
+    if (tab === 'claims') API.getInsuranceClaims().then(d => { if (d?.data) $(`#insuranceClaims`).innerHTML = `<div class="card card-2col"><div class="card-header"><h3><i class="fas fa-file-invoice"></i> Claims</h3></div><div class="card-body"><table class="table"><thead><tr><th>Claim</th><th>Type</th><th>Amount</th><th>Status</th></tr></thead><tbody>${d.data.slice(0,20).map(c => `<tr><td>${c.claim_id?.slice(0,8)||'N/A'}</td><td>${(c.claim_type||'').replace('_',' ').toUpperCase()}</td><td>${fmtUSD(c.amount||0)}</td><td><span class="badge ${c.status==='approved'?'badge-green':c.status==='denied'?'badge-red':'badge-yellow'}">${c.status||'pending'}</span></td></tr>`).join('')}</tbody></table></div></div>`; });
+    if (tab === 'premiums') API.getInsurancePremiums().then(d => { if (d?.data) $(`#insurancePremiums`).innerHTML = `<div class="card card-2col"><div class="card-header"><h3><i class="fas fa-dollar-sign"></i> Premiums</h3></div><div class="card-body"><table class="table"><thead><tr><th>Policy</th><th>Monthly</th><th>Annual</th><th>Due</th></tr></thead><tbody>${d.data.slice(0,20).map(p => `<tr><td>${p.policy_id?.slice(0,8)||'N/A'}</td><td>${fmtUSD(p.monthly_premium||p.monthly||0)}</td><td>${fmtUSD(p.annual_premium||p.annual||0)}</td><td>${p.next_due||p.due_date||'N/A'}</td></tr>`).join('')}</tbody></table></div></div>`; });
   }));
 }
 
 function renderCompliance() {
   const amlDiv = $('#complianceAml'); if (!amlDiv) return;
   API.getComplianceScore('demo').then(d => {
-    if (d) amlDiv.innerHTML = `<div class="card-header"><h3>Compliance Overview</h3></div><div class="card-body"><pre>${JSON.stringify(d, null, 2)}</pre></div>`;
-    else amlDiv.innerHTML = '<div class="card-body"><p class="text-center">No compliance data</p></div>';
+    if (d) amlDiv.innerHTML = `<div class="card"><div class="card-header"><h3><i class="fas fa-shield-alt"></i> Compliance Overview</h3></div><div class="card-body"><div class="portfolio-summary"><div class="summary-card"><div class="summary-label">Risk Score</div><div class="summary-value">${d.risk_score||d.score||0}</div></div><div class="summary-card"><div class="summary-label">Flags</div><div class="summary-value">${(d.flags||d.alerts||[]).length||0}</div></div><div class="summary-card"><div class="summary-label">Level</div><div class="summary-value">${d.kyc_level||d.level||'N/A'}</div></div><div class="summary-card"><div class="summary-label">Status</div><div class="summary-value">${d.status||d.overall||'N/A'}</div></div></div></div></div>`;
+    else amlDiv.innerHTML = '<div class="card"><div class="card-body"><p class="text-center">No compliance data</p></div></div>';
   });
   $$('.tab-btn[data-ctab]').forEach(b => b.addEventListener('click', () => {
     $$('.tab-btn[data-ctab]').forEach(x => x.classList.remove('active')); b.classList.add('active');
     const tab = b.dataset.ctab;
     ['aml','kyc','sanctions','countries','reporting'].forEach(t => $(`#compliance${t.charAt(0).toUpperCase()+t.slice(1)}`).style.display = t === tab ? 'block' : 'none');
-    if (tab === 'countries') API.getComplianceCountries().then(d => { if (d) $(`#complianceCountries`).innerHTML = `<div class="card-header"><h3>Country Rules</h3></div><div class="card-body"><pre>${JSON.stringify(d, null, 2)}</pre></div>`; });
+    if (tab === 'countries') API.getComplianceCountries().then(d => { if (d) $(`#complianceCountries`).innerHTML = `<div class="card"><div class="card-header"><h3><i class="fas fa-globe"></i> Country Rules</h3></div><div class="card-body"><table class="table"><thead><tr><th>Country</th><th>KYC Level</th><th>SAR Threshold</th><th>Regulator</th></tr></thead><tbody>${(d.countries||d.data||d||[]).slice(0,30).map(c => `<tr><td>${c.name||c.country||c.code||'N/A'}</td><td>${c.kyc_level||c.level||'N/A'}</td><td>${c.sar_threshold ? fmtUSD(c.sar_threshold) : c.threshold||'N/A'}</td><td>${(c.regulators||c.regulator||[]).join(', ')||c.regulator||'N/A'}</td></tr>`).join('')}</tbody></table></div></div>`; });
   }));
 }
 
 function renderSecurity() {
   const ovDiv = $('#securityOverview'); if (!ovDiv) return;
   API.getWafStats().then(d => {
-    if (d) ovDiv.innerHTML = `<div class="card"><div class="card-header"><h3>WAF Stats</h3></div><div class="card-body"><pre>${JSON.stringify(d, null, 2)}</pre></div></div>`;
+    if (d) ovDiv.innerHTML = `<div class="card"><div class="card-header"><h3><i class="fas fa-shield-alt"></i> WAF Statistics</h3></div><div class="card-body"><div class="portfolio-summary"><div class="summary-card"><div class="summary-label">Total Blocked</div><div class="summary-value">${d.total_blocked||d.blocked||0}</div></div><div class="summary-card"><div class="summary-label">SQL Injection</div><div class="summary-value">${d.sql_injection||d.categories?.sql_injection||0}</div></div><div class="summary-card"><div class="summary-label">XSS Attempts</div><div class="summary-value">${d.xss||d.categories?.xss||0}</div></div><div class="summary-card"><div class="summary-label">Requests/sec</div><div class="summary-value">${d.requests_per_sec||d.rps||0}</div></div></div></div></div>`;
     else ovDiv.innerHTML = '<div class="card"><div class="card-body"><p class="text-center">Loading...</p></div></div>';
   });
   $$('.tab-btn[data-stab]').forEach(b => b.addEventListener('click', () => {
@@ -802,10 +809,10 @@ function renderSecurity() {
       const el = $(`#security${t.charAt(0).toUpperCase()+t.slice(1)}`);
       if (el) el.style.display = t === tab ? 'grid' : 'none';
     });
-    if (tab === 'waf') API.getWafStats().then(d => { if (d) $(`#securityWaf`).innerHTML = `<div class="card-header"><h3>WAF Statistics</h3></div><div class="card-body"><pre>${JSON.stringify(d, null, 2)}</pre></div>`; });
-    if (tab === 'ids') API.getIdsEvents().then(d => { if (d) $(`#securityIds`).innerHTML = `<div class="card-header"><h3>IDS Events</h3></div><div class="card-body"><pre>${JSON.stringify(d, null, 2)}</pre></div>`; });
-    if (tab === 'siem') API.getSiemLogs().then(d => { if (d) $(`#securitySiem`).innerHTML = `<div class="card-header"><h3>SIEM Logs</h3></div><div class="card-body"><pre>${JSON.stringify(d, null, 2)}</pre></div>`; });
-    if (tab === 'ddos') API.getDdosStats().then(d => { if (d) $(`#securityDdos`).innerHTML = `<div class="card-header"><h3>DDoS Protection Stats</h3></div><div class="card-body"><pre>${JSON.stringify(d, null, 2)}</pre></div>`; });
+    if (tab === 'waf') API.getWafStats().then(d => { if (d) $(`#securityWaf`).innerHTML = `<div class="card"><div class="card-header"><h3><i class="fas fa-shield-virus"></i> WAF Statistics</h3></div><div class="card-body"><div class="portfolio-summary"><div class="summary-card"><div class="summary-label">Inspected</div><div class="summary-value">${fmt(d.total_requests_inspected||0,0)}</div></div><div class="summary-card"><div class="summary-label">Blocked</div><div class="summary-value">${fmt(d.blocked||0,0)}</div></div><div class="summary-card"><div class="summary-label">High Risk</div><div class="summary-value">${d.high_risk_detected||0}</div></div><div class="summary-card"><div class="summary-label">Blocked IPs</div><div class="summary-value">${d.blocked_ips||0}</div></div><div class="summary-card"><div class="summary-label">Block Rate</div><div class="summary-value">${(d.block_rate||0).toFixed(1)}%</div></div></div></div></div>`; });
+    if (tab === 'ids') API.getIdsEvents().then(d => { if (d) $(`#securityIds`).innerHTML = `<div class="card"><div class="card-header"><h3><i class="fas fa-bug"></i> IDS Events</h3></div><div class="card-body">${d.events?.length ? `<table class="table"><thead><tr><th>Time</th><th>Type</th><th>Source IP</th><th>Details</th></tr></thead><tbody>${(d.events||[]).slice(0,50).map(e => `<tr><td>${(e.timestamp||'').slice(11,19)}</td><td><span class="badge ${e.event_type==='sql_injection'||e.event_type==='xss'?'badge-red':'badge-yellow'}">${e.event_type||'unknown'}</span></td><td><code>${e.source_ip||''}</code></td><td style="font-size:12px">${JSON.stringify(e.details||{}).slice(0,60)}</td></tr>`).join('')}</tbody></table>`:'<p class="text-center" style="padding:20px;color:var(--text-muted)">No IDS events recorded</p>'}</div></div>`; });
+    if (tab === 'siem') API.getSiemLogs().then(d => { if (d) $(`#securitySiem`).innerHTML = `<div class="card"><div class="card-header"><h3><i class="fas fa-chart-line"></i> SIEM Logs</h3></div><div class="card-body">${d.logs?.length ? `<table class="table"><thead><tr><th>Time</th><th>Source</th><th>Severity</th><th>Event</th><th>Message</th></tr></thead><tbody>${(d.logs||[]).slice(0,50).map(l => `<tr><td>${(l.timestamp||'').slice(11,19)}</td><td>${l.log_source||''}</td><td><span class="badge ${l.severity==='critical'?'badge-red':l.severity==='high'?'badge-red':l.severity==='medium'?'badge-yellow':'badge-green'}">${l.severity||'info'}</span></td><td>${l.event_type||''}</td><td style="font-size:12px;max-width:200px;overflow:hidden;text-overflow:ellipsis">${(l.message||'').slice(0,80)}</td></tr>`).join('')}</tbody></table>`:'<p class="text-center" style="padding:20px;color:var(--text-muted)">No SIEM logs recorded</p>'}</div></div>`; });
+    if (tab === 'ddos') API.getDdosStats().then(d => { if (d) $(`#securityDdos`).innerHTML = `<div class="card"><div class="card-header"><h3><i class="fas fa-skull-crossbones"></i> DDoS Protection Stats</h3></div><div class="card-body"><div class="portfolio-summary"><div class="summary-card"><div class="summary-label">Blocked IPs</div><div class="summary-value">${d.blocked_ips||0}</div></div><div class="summary-card"><div class="summary-label">Whitelisted</div><div class="summary-value">${d.whitelisted_ips||0}</div></div><div class="summary-card"><div class="summary-label">Active Monitors</div><div class="summary-value">${d.active_monitors||0}</div></div><div class="summary-card"><div class="summary-label">Req Threshold</div><div class="summary-value">${d.threshold_requests||0}</div></div></div></div></div>`; });
   }));
 }
 
