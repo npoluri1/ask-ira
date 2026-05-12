@@ -1,14 +1,9 @@
 {
-  "buildCommand": "pip install -e .",
-  "outputDirectory": ".",
-  "installCommand": "pip install -e \".[groq,gemini,huggingface,mistral,mcp,eval]\"",
-  "rewrites": [
-    { "source": "/(.*)", "destination": "/api/index" }
-  ],
+  "installCommand": "pip install fastapi httpx python-multipart",
   "functions": {
     "api/index.py": {
-      "memory": 1024,
-      "maxDuration": 60
+      "memory": 256,
+      "maxDuration": 30
     }
   }
 }
