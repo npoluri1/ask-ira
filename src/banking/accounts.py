@@ -1,6 +1,5 @@
 import time
 import uuid
-from decimal import Decimal
 from typing import Any
 
 ACCOUNT_TYPES = ["checking", "savings", "joint_checking", "money_market", "student"]

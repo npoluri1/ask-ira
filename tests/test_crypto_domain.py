@@ -1,9 +1,10 @@
 import pytest
-from src.crypto.wallets import CryptoWalletEngine, SUPPORTED_CURRENCIES, Wallet
-from src.crypto.transactions import CryptoTransactionsEngine
-from src.crypto.staking import StakingEngine
-from src.crypto.defi import DeFiEngine
+
 from src.crypto.compliance import CryptoComplianceEngine
+from src.crypto.defi import DeFiEngine
+from src.crypto.staking import StakingEngine
+from src.crypto.transactions import CryptoTransactionsEngine
+from src.crypto.wallets import SUPPORTED_CURRENCIES, CryptoWalletEngine, Wallet
 
 
 @pytest.fixture(autouse=True)

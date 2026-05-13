@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Query
-from src.payments import engine, swift, sepa, ach, faster, rails
+
+from src.payments import ach, engine, faster, rails, sepa, swift
 
 router = APIRouter(prefix="/api/v1/payments")
 

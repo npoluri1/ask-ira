@@ -1,6 +1,5 @@
 import time
 import uuid
-from typing import Any
 
 BILL_CATEGORIES = {
     "utilities": ["Electric Company", "Water Utility", "Gas Company", "Internet Provider", "Cable TV"],

@@ -1,11 +1,10 @@
 import hashlib
-import hmac
-import json
 import secrets
 import time
-from typing import Any
 
-from src.auth import USER_DB, TOKEN_BLACKLIST, _create_token, _decode_token, hash_password, validate_token
+from src.auth import (
+    USER_DB,
+)
 from src.config.settings import get_settings
 
 settings = get_settings()

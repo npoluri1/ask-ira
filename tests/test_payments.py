@@ -1,9 +1,10 @@
 import pytest
-from src.payments.engine import PaymentsEngine, SUPPORTED_PAYMENT_TYPES
-from src.payments.swift import SWIFTEngine, IBAN_LENGTHS, SWIFT_MEMBER_BANKS
-from src.payments.sepa import SEPAEngine
+
 from src.payments.ach import AHEngine
+from src.payments.engine import SUPPORTED_PAYMENT_TYPES, PaymentsEngine
 from src.payments.faster_payments import FasterPaymentsEngine
+from src.payments.sepa import SEPAEngine
+from src.payments.swift import IBAN_LENGTHS, SWIFT_MEMBER_BANKS, SWIFTEngine
 
 
 @pytest.fixture

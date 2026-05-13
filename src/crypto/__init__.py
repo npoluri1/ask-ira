@@ -1,8 +1,8 @@
-from .wallets import CryptoWalletEngine
-from .transactions import CryptoTransactionsEngine
-from .staking import StakingEngine
-from .defi import DeFiEngine
 from .compliance import CryptoComplianceEngine
+from .defi import DeFiEngine
+from .staking import StakingEngine
+from .transactions import CryptoTransactionsEngine
+from .wallets import CryptoWalletEngine
 
 wallets = CryptoWalletEngine()
 transactions = CryptoTransactionsEngine()

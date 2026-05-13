@@ -1,4 +1,3 @@
-import time
 import warnings
 from contextlib import asynccontextmanager
 from pathlib import Path
@@ -9,20 +8,20 @@ from fastapi import FastAPI, Request
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 warnings.filterwarnings("ignore", category=UserWarning)
 warnings.filterwarnings("ignore", message=".*allowed_objects.*")
-from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse, RedirectResponse
-from fastapi.staticfiles import StaticFiles
+from fastapi.middleware.cors import CORSMiddleware  # noqa: E402
+from fastapi.responses import JSONResponse, RedirectResponse  # noqa: E402
+from fastapi.staticfiles import StaticFiles  # noqa: E402
 
-from src.api.middleware import RequestLoggingMiddleware
-from src.api.market_routes import router as market_router
-from src.api.routes import config_router, router
-from src.api.auth_routes import router as auth_router
-from src.cache import get_cache
-from src.config import get_settings, validate_config
-from src.config.logging import setup_logging
-from src.cybersecurity import siem, ids, ddos, waf, run_security_check
-from src.middleware import RateLimitMiddleware, RequestIDMiddleware, SecurityHeadersMiddleware
-from src.monitoring import get_health_status, get_metrics, get_prometheus_metrics
+from src.api.auth_routes import router as auth_router  # noqa: E402
+from src.api.market_routes import router as market_router  # noqa: E402
+from src.api.middleware import RequestLoggingMiddleware  # noqa: E402
+from src.api.routes import config_router, router  # noqa: E402
+from src.cache import get_cache  # noqa: E402
+from src.config import get_settings, validate_config  # noqa: E402
+from src.config.logging import setup_logging  # noqa: E402
+from src.cybersecurity import ids, run_security_check, siem  # noqa: E402
+from src.middleware import RateLimitMiddleware, RequestIDMiddleware, SecurityHeadersMiddleware  # noqa: E402
+from src.monitoring import get_health_status, get_metrics, get_prometheus_metrics  # noqa: E402
 
 logger = setup_logging()
 settings = get_settings()
@@ -30,7 +29,6 @@ validate_config()
 
 
 async def security_middleware(request: Request, call_next):
-    start = time.time()
     ip = request.client.host if request.client else "0.0.0.0"
     body_bytes = await request.body()
     body_str = body_bytes.decode("utf-8", errors="replace")
@@ -60,7 +58,6 @@ async def security_middleware(request: Request, call_next):
         )
 
     response = await call_next(request)
-    elapsed = time.time() - start
 
     if request.url.path.startswith("/ui/") or request.url.path == "/ui":
         response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
@@ -154,47 +151,38 @@ async def root():
 async def system_capabilities():
     modules = []
     try:
-        from src.banking import accounts
         modules.append("banking")
     except Exception:
         pass
     try:
-        from src.payments import engine
         modules.append("payments")
     except Exception:
         pass
     try:
-        from src.crypto import wallets
         modules.append("crypto")
     except Exception:
         pass
     try:
-        from src.insurance import policies
         modules.append("insurance")
     except Exception:
         pass
     try:
-        from src.compliance import aml
         modules.append("compliance")
     except Exception:
         pass
     try:
-        from src.wallets import banking
         modules.append("wallets")
     except Exception:
         pass
     try:
-        from src.products import mutual_funds
         modules.append("products")
     except Exception:
         pass
     try:
-        from src.agent_platform import AGENT_REGISTRY
         modules.append("agent_platform")
     except Exception:
         pass
     try:
-        from src.cybersecurity import waf
         modules.append("cybersecurity")
     except Exception:
         pass

@@ -1,12 +1,13 @@
 import pytest
+
 from src.cybersecurity import (
-    WebApplicationFirewall,
-    IntrusionDetectionSystem,
-    SIEMEngine,
+    IDS_ALERTS,
     DDoSProtection,
     InputSanitizer,
+    IntrusionDetectionSystem,
+    SIEMEngine,
     VulnerabilityScanner,
-    IDS_ALERTS,
+    WebApplicationFirewall,
     run_security_check,
 )
 

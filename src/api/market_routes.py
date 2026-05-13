@@ -2,7 +2,6 @@ import asyncio
 import json
 import logging
 import math
-import time as time_module
 from datetime import datetime, timezone
 
 import httpx
@@ -214,69 +213,7 @@ async def get_stocks():
     return {"data": results, "updatedAt": datetime.now(timezone.utc).isoformat(), "dataSource": "seed" if is_seed() else "realtime"}
 
 
-@router.get("/forex")
-async def get_forex():
-    results = []
-    for name, symbol in FOREX_MAP.items():
-        s = generate_dynamic_forex(name)
-        if not is_seed():
-            try:
-                data = _fetch_ticker(symbol)
-                s.update(data)
-            except Exception:
-                pass
-        results.append({"symbol": name, **s})
-    return {"data": results, "updatedAt": datetime.now(timezone.utc).isoformat(), "dataSource": "seed" if is_seed() else "realtime"}
 
-
-@router.get("/crypto")
-async def get_crypto():
-    results = []
-    for name, symbol in CRYPTO_MAP.items():
-        s = generate_dynamic_crypto(name)
-        if not is_seed():
-            try:
-                data = _fetch_ticker(symbol)
-                s.update(data)
-            except Exception:
-                pass
-        results.append({"symbol": name, **s})
-    return {"data": results, "updatedAt": datetime.now(timezone.utc).isoformat(), "dataSource": "seed" if is_seed() else "realtime"}
-
-
-@router.get("/commodities")
-async def get_commodities():
-    results = []
-    for name, symbol in COMMODITY_MAP.items():
-        s = generate_dynamic_commodity(name)
-        if not is_seed():
-            try:
-                data = _fetch_ticker(symbol)
-                s.update(data)
-            except Exception:
-                pass
-        results.append({"symbol": name, **s})
-    return {"data": results, "updatedAt": datetime.now(timezone.utc).isoformat(), "dataSource": "seed" if is_seed() else "realtime"}
-
-
-@router.get("/bonds")
-async def get_bonds():
-    results = []
-    for name, symbol in BOND_MAP.items():
-        s = generate_dynamic_bond(name)
-        if not is_seed():
-            try:
-                data = _fetch_ticker(symbol)
-                if name.endswith("Y") and "price" in data:
-                    yf_yield = data.get("price", 0)
-                    if yf_yield < 20:
-                        data["yield"] = round(yf_yield, 2)
-                        data["price"] = round(100 - ((yf_yield - 2) * 2), 2) if yf_yield > 2 else 100
-                s.update(data)
-            except Exception:
-                pass
-        results.append({"symbol": name, **s})
-    return {"data": results, "updatedAt": datetime.now(timezone.utc).isoformat(), "dataSource": "seed" if is_seed() else "realtime"}
 
 
 @router.get("/movers")

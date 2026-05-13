@@ -1,6 +1,5 @@
 import time
 import uuid
-from typing import Any
 
 CLAIMS_DB: dict[str, list[dict]] = {}
 CLAIM_STATUSES = ["filed", "under_review", "approved", "paid", "denied", "appealed"]

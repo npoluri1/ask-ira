@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Query
-from src.compliance import aml, sanctions, kyc, reporting
+
+from src.compliance import aml, kyc, reporting, sanctions
 from src.compliance_router import compliance_router
 
 router = APIRouter(prefix="/api/v1/compliance")

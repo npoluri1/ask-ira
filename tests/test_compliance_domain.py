@@ -1,8 +1,9 @@
 import pytest
-from src.compliance.aml import AMLEngine, HIGH_RISK_COUNTRIES
-from src.compliance.kyc import KYCEngine, KYC_LEVELS
-from src.compliance.sanctions import SanctionsEngine
+
+from src.compliance.aml import HIGH_RISK_COUNTRIES, AMLEngine
+from src.compliance.kyc import KYC_LEVELS, KYCEngine
 from src.compliance.reporting import ReportingEngine
+from src.compliance.sanctions import SanctionsEngine
 
 
 @pytest.mark.asyncio

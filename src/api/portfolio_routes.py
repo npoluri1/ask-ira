@@ -1,7 +1,14 @@
-from fastapi import APIRouter, Query
-from src.portfolio import calculate_portfolio, rebalance_portfolio, get_diversification_score
-from src.trade_execution import execute_trade, get_balance, get_trade_history, get_pending_approvals, approve_trade
-from src.products import mutual_funds, fixed_deposits, annuities, sip
+from fastapi import APIRouter
+
+from src.portfolio import calculate_portfolio, get_diversification_score, rebalance_portfolio
+from src.products import annuities, fixed_deposits, mutual_funds, sip
+from src.trade_execution import (
+    approve_trade,
+    execute_trade,
+    get_balance,
+    get_pending_approvals,
+    get_trade_history,
+)
 
 router = APIRouter(prefix="/api/v1/portfolio")
 

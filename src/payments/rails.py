@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import copy
-from typing import Any, Optional
+from typing import Any
 
 from src.config.logging import get_logger
 

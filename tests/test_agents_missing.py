@@ -1,8 +1,9 @@
 import pytest
-from src.agents.supervisor import SupervisorAgent
+
+from src.agents.portfolio_manager import PortfolioManagerAgent
 from src.agents.researcher import ResearcherAgent
 from src.agents.risk_assessor import RiskAssessorAgent
-from src.agents.portfolio_manager import PortfolioManagerAgent
+from src.agents.supervisor import SupervisorAgent
 from src.mcp_servers.registry import MCPRegistry
 
 

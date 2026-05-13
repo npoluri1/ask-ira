@@ -1,6 +1,5 @@
 import time
 import uuid
-from typing import Any
 
 CARD_PRODUCTS = {
     "cashback": {

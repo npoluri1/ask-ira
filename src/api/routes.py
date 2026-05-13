@@ -1,13 +1,14 @@
 import asyncio
-import time
 import logging
+import time
 
 from fastapi import APIRouter, WebSocket, WebSocketDisconnect
 from fastapi.responses import JSONResponse, StreamingResponse
 from langchain_core.messages import HumanMessage
 
-from src.api.models import QueryRequest, QueryResponse
+from src.agents.graph import create_graph
 from src.api.fallback_query import generate_fallback_report
+from src.api.models import QueryRequest, QueryResponse
 from src.config import get_settings
 from src.config.data_source import (
     get_data_source,
@@ -19,7 +20,6 @@ from src.config.data_source import (
 )
 from src.mcp_servers.registry import MCPRegistry
 from src.streaming import manager, stream_research
-from src.agents.graph import create_graph
 
 logger = logging.getLogger("ask-ira")
 settings = get_settings()
@@ -166,7 +166,7 @@ async def query_stream(request: QueryRequest):
         try:
             graph = _get_graph(request.session_id)
             config = {"configurable": {"thread_id": request.session_id}}
-            
+
             stages = {
                 "guard_input": "Checking input safety...",
                 "supervisor": "Planning research strategy...",

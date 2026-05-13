@@ -1,6 +1,6 @@
 from .banking_wallet import BankingWalletEngine
-from .insurance_wallet import InsuranceWalletEngine
 from .crypto_wallet import CryptoWalletEngine
+from .insurance_wallet import InsuranceWalletEngine
 
 banking = BankingWalletEngine()
 insurance = InsuranceWalletEngine()

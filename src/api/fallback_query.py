@@ -1,6 +1,5 @@
 import hashlib
 import random
-import re
 import time
 
 STOCK_DATA = {
@@ -231,14 +230,14 @@ def generate_fallback_report(query: str, risk_profile: str = "moderate") -> dict
                 s = STOCK_DATA[t]
                 rows.append(f"\n### {s['name']} ({t})")
                 rows.append(f"- **Price:** ${s['price']:.2f} | **P/E:** {s['pe']:.1f}x | **EPS:** ${s['eps']:.2f} | **Div:** {s['div']*100:.2f}% | **Sector:** {s['sector']}")
-            rows.append(f"\n### Valuation Comparison")
+            rows.append("\n### Valuation Comparison")
             vals = [(t, STOCK_DATA[t]['pe']) for t in tickers]
             vals.sort(key=lambda x: x[1])
             cheapest = vals[0][0]
             rows.append(f"{cheapest} has the lowest P/E of {vals[0][1]:.1f}x, suggesting best value among peers.")
-            rows.append(f"\n### Sector Context")
+            rows.append("\n### Sector Context")
             rows.append(_sector_analysis(STOCK_DATA[tickers[0]]['sector']))
-            rows.append(f"\n### Recommendation")
+            rows.append("\n### Recommendation")
             confidence = random.randint(70, 92)
             rows.append(f"**Preferred Pick:** {cheapest} (lowest valuation multiple of {vals[0][1]:.1f}x). Confidence: {confidence}%")
             report = "\n".join(rows)
@@ -251,17 +250,17 @@ def generate_fallback_report(query: str, risk_profile: str = "moderate") -> dict
             report_parts = []
             report_parts.append(f"## AI Research Report: {stock['name']} ({ticker})")
             report_parts.append(f"\n**Analysis Time:** {current_time}")
-            report_parts.append(f"\n### Company Overview")
+            report_parts.append("\n### Company Overview")
             report_parts.append(f"{stock['name']} is a leading player in the {stock['sector']} sector, currently trading at ${stock['price']:.2f}.")
-            report_parts.append(f"\n### Key Financial Metrics")
+            report_parts.append("\n### Key Financial Metrics")
             report_parts.append(f"- **Current Price:** ${stock['price']:.2f}")
             report_parts.append(f"- **P/E Ratio:** {stock['pe']:.1f}x")
             report_parts.append(f"- **EPS:** ${stock['eps']:.2f}")
             report_parts.append(f"- **Dividend Yield:** {stock['div']*100:.2f}%")
             report_parts.append(f"- **Market Cap:** ${stock['price'] * random.randint(50, 500) / 10:.1f}B")
-            report_parts.append(f"\n### Sector Analysis")
+            report_parts.append("\n### Sector Analysis")
             report_parts.append(_sector_analysis(stock['sector']))
-            report_parts.append(f"\n### Technical Outlook")
+            report_parts.append("\n### Technical Outlook")
             report_parts.append(_technical_outlook(ticker))
             report_parts.append(f"\n### Risk Assessment ({risk_profile} profile)")
             risks = [
@@ -272,7 +271,7 @@ def generate_fallback_report(query: str, risk_profile: str = "moderate") -> dict
             ]
             for r in risks:
                 report_parts.append(f"- {r.format(sector=stock['sector'])}")
-            report_parts.append(f"\n### Recommendation")
+            report_parts.append("\n### Recommendation")
             confidence = random.randint(65, 92)
             if risk_profile == "aggressive":
                 report_parts.append(f"**BUY** with stop-loss at ${stock['price'] * 0.92:.2f}. Target: ${stock['price'] * 1.15:.2f} (15% upside). Confidence: {confidence}%")
@@ -348,7 +347,7 @@ def generate_fallback_report(query: str, risk_profile: str = "moderate") -> dict
             "confidence": round(confidence_val, 2),
             "session_id": f"fallback_{int(time.time())}",
         }
-    except Exception as e:
+    except Exception:
         current_time = time.strftime("%Y-%m-%d %H:%M:%S UTC")
         return {
             "report": f"""## AI Market Research Report

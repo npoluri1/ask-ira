@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Query
-from src.crypto import wallets, transactions, staking, defi
+
+from src.crypto import defi, staking, transactions, wallets
 
 router = APIRouter(prefix="/api/v1/crypto")
 

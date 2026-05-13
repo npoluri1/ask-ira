@@ -1,11 +1,9 @@
-import hashlib
 import ipaddress
 import json
 import re
 import secrets
 import time
 from collections import defaultdict
-from typing import Any
 
 # ============================================================
 # 1. WEB APPLICATION FIREWALL (WAF)
@@ -275,10 +273,10 @@ class SIEMEngine:
         now = time.time()
         window = 300
 
-        recent = [l for l in SIEM_LOGS if now - time.mktime(time.strptime(l["timestamp"], "%Y-%m-%dT%H:%M:%SZ")) < window]
+        recent = [rec for rec in SIEM_LOGS if now - time.mktime(time.strptime(rec["timestamp"], "%Y-%m-%dT%H:%M:%SZ")) < window]
 
-        failed_logins = [l for l in recent if l["event_type"] == "failed_login"]
-        successful_logins = [l for l in recent if l["event_type"] == "login_success"]
+        failed_logins = [rec for rec in recent if rec["event_type"] == "failed_login"]
+        successful_logins = [rec for rec in recent if rec["event_type"] == "login_success"]
         if len(failed_logins) >= 5 and len(successful_logins) >= 1:
             incidents.append({
                 "correlation_id": f"corr_{int(now)}_{secrets.token_hex(4)}",
@@ -290,8 +288,8 @@ class SIEMEngine:
                 "affected_logs": len(failed_logins) + len(successful_logins),
             })
 
-        waf_blocks = [l for l in recent if l["event_type"] == "waf_block"]
-        api_abuse = [l for l in recent if l["event_type"] == "api_abuse"]
+        waf_blocks = [rec for rec in recent if rec["event_type"] == "waf_block"]
+        api_abuse = [rec for rec in recent if rec["event_type"] == "api_abuse"]
         if len(waf_blocks) >= 3 and len(api_abuse) >= 1:
             incidents.append({
                 "correlation_id": f"corr_{int(now)}_{secrets.token_hex(4)}",

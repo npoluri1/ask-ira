@@ -1,6 +1,5 @@
 import time
 import uuid
-from typing import Any
 
 ANNUITY_PRODUCTS = {
     "immediate_fixed": {

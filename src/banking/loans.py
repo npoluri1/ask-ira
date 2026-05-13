@@ -1,6 +1,5 @@
 import time
 import uuid
-from typing import Any
 
 LOAN_TYPES = {
     "personal": {"name": "Personal Loan", "min_amount": 1000, "max_amount": 50000, "base_rate": 0.0899, "min_term": 12, "max_term": 60},
@@ -92,13 +91,13 @@ class LoansEngine:
 
     def get_loan_summary(self, user_id: str) -> dict:
         loans = self.get_loans(user_id)
-        total_principal = sum(l["principal"] for l in loans)
-        total_remaining = sum(l["remaining_balance"] for l in loans)
-        total_emi = sum(l["emi"] for l in loans)
+        total_principal = sum(loan["principal"] for loan in loans)
+        total_remaining = sum(loan["remaining_balance"] for loan in loans)
+        total_emi = sum(loan["emi"] for loan in loans)
         return {
             "user_id": user_id,
-            "active_loans": sum(1 for l in loans if l["status"] == "approved"),
-            "paid_loans": sum(1 for l in loans if l["status"] == "paid"),
+            "active_loans": sum(1 for loan in loans if loan["status"] == "approved"),
+            "paid_loans": sum(1 for loan in loans if loan["status"] == "paid"),
             "total_principal": round(total_principal, 2),
             "total_remaining": round(total_remaining, 2),
             "total_monthly_emi": round(total_emi, 2),

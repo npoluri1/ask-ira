@@ -1,6 +1,5 @@
 import time
 import uuid
-from typing import Any
 
 FD_PRODUCTS = {
     "fd_3m": {"name": "3 Month Fixed Deposit", "min_amount": 5000, "max_amount": 10000000, "interest_rate": 0.055, "term_days": 90, "compound": "maturity"},

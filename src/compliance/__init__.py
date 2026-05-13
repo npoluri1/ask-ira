@@ -1,7 +1,7 @@
 from .aml import AMLEngine
-from .sanctions import SanctionsEngine
 from .kyc import KYCEngine
 from .reporting import ReportingEngine
+from .sanctions import SanctionsEngine
 
 aml = AMLEngine()
 sanctions = SanctionsEngine()

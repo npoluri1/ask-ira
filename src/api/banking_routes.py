@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Body, Query
-from src.banking import accounts, transfers, transactions, loans, deposits, credit_cards, bills
+
+from src.banking import accounts, bills, credit_cards, deposits, loans, transactions, transfers
 
 router = APIRouter(prefix="/api/v1/banking")
 

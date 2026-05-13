@@ -1,7 +1,5 @@
-import random
 import time
 import uuid
-from typing import Any
 
 MUTUAL_FUNDS = {
     "VFIAX": {
@@ -167,7 +165,6 @@ class MutualFundsEngine:
     def get_holdings(self, user_id: str) -> list[dict]:
         holdings = FUND_HOLDINGS_DB.get(user_id, [])
         total_value = sum(h["current_value"] for h in holdings)
-        total_invested = sum(h["invested_amount"] for h in holdings)
 
         result = []
         for h in holdings:

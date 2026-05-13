@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import time
 import uuid
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List
 
 SANCTIONED_ADDRESSES: List[str] = [
     "0x1f9090aae28b8a3dceadf281b0f12828e676c326",

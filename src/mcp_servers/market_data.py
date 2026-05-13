@@ -2,7 +2,7 @@ import asyncio
 
 import yfinance as yf
 
-from src.config.data_source import is_seed, is_realtime
+from src.config.data_source import is_seed
 from src.mcp_servers.base import MCPRequest, MCPResponse, MCPServer
 
 

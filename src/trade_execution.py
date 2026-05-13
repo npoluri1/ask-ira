@@ -1,5 +1,4 @@
 import time
-from decimal import Decimal
 from typing import Any
 
 TRADE_HISTORY: dict[str, list[dict]] = {}

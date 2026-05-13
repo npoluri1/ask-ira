@@ -1,6 +1,7 @@
 import pytest
-from src.insurance.policies import PoliciesEngine, COVERAGE_TYPES
+
 from src.insurance.claims import ClaimsEngine
+from src.insurance.policies import COVERAGE_TYPES, PoliciesEngine
 from src.insurance.premiums import PremiumsEngine
 
 

@@ -1,4 +1,5 @@
 import pytest
+
 from src.wallets.banking_wallet import BankingWalletEngine
 from src.wallets.crypto_wallet import CryptoWalletEngine
 from src.wallets.insurance_wallet import InsuranceWalletEngine

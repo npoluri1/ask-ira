@@ -1,8 +1,15 @@
 from fastapi import APIRouter, Request
-from fastapi.responses import JSONResponse
 
 from src.cybersecurity import (
-    waf, ids, siem, ddos, scanner, incident_response, threat_intel, run_security_check, get_security_headers, sanitizer,
+    ddos,
+    get_security_headers,
+    ids,
+    incident_response,
+    run_security_check,
+    scanner,
+    siem,
+    threat_intel,
+    waf,
 )
 
 router = APIRouter(prefix="/api/v1/security")

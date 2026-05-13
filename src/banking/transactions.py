@@ -1,7 +1,6 @@
 import random
 import time
 import uuid
-from typing import Any
 
 TRANSACTION_DB: dict[str, list[dict]] = {}
 

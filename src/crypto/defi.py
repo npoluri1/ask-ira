@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import time
 import uuid
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List
 
 PROTOCOLS: Dict[str, Dict[str, Any]] = {
     "uniswap_v3": {"name": "Uniswap V3", "tvl": 3800000000, "avg_apy": 15.0, "risk": "medium"},

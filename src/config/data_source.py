@@ -9,7 +9,6 @@ Usage:
       # use seed data
 """
 
-import os
 from typing import Literal
 
 DataSourceMode = Literal["realtime", "seed"]

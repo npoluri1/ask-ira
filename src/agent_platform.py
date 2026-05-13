@@ -316,7 +316,7 @@ def agent_sandbox(agent_type: str = "", timeout: int = 30, max_tokens: int = 409
             except asyncio.TimeoutError:
                 record_metric(agent_type, timeout, False)
                 raise TimeoutError(f"Agent {agent_type} timed out after {timeout}s")
-            except Exception as e:
+            except Exception:
                 record_metric(agent_type, time.time() - start, False)
                 raise
         return wrapper

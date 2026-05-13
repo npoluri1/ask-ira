@@ -1,6 +1,5 @@
 import time
 import uuid
-from typing import Any
 
 SIP_DB: dict[str, list[dict]] = {}
 SIP_FREQUENCIES = ["daily", "weekly", "monthly", "quarterly"]

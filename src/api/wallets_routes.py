@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Query
-from src.wallets import banking, insurance, crypto_wallet
+
+from src.wallets import banking, crypto_wallet, insurance
 
 router = APIRouter(prefix="/api/v1/wallets")
 

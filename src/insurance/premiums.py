@@ -1,7 +1,6 @@
 import math
 import time
 import uuid
-from typing import Any
 
 PREMIUM_HISTORY_DB: dict[str, list[dict]] = {}
 
@@ -36,7 +35,6 @@ class PremiumsEngine:
             monthly_premium *= property_factor
             breakdown["property_factor"] = round(property_factor, 2)
 
-        coverage = monthly_premium
         monthly_premium = round(monthly_premium, 2)
 
         return {

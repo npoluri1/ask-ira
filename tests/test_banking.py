@@ -1,10 +1,11 @@
 import pytest
+
 from src.banking.accounts import AccountsEngine
-from src.banking.transfers import TransfersEngine
-from src.banking.loans import LoansEngine
-from src.banking.deposits import DepositsEngine
-from src.banking.credit_cards import CreditCardsEngine
 from src.banking.bills import BillsEngine
+from src.banking.credit_cards import CreditCardsEngine
+from src.banking.deposits import DepositsEngine
+from src.banking.loans import LoansEngine
+from src.banking.transfers import TransfersEngine
 
 
 @pytest.fixture

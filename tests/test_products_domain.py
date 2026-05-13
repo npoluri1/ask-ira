@@ -1,7 +1,8 @@
 import pytest
-from src.products.mutual_funds import MutualFundsEngine
-from src.products.fixed_deposits import FixedDepositsEngine
+
 from src.products.annuities import AnnuitiesEngine
+from src.products.fixed_deposits import FixedDepositsEngine
+from src.products.mutual_funds import MutualFundsEngine
 from src.products.sip import SIPEngine
 
 

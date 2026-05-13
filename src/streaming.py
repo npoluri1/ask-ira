@@ -1,7 +1,6 @@
 """WebSocket and SSE streaming for real-time research report generation."""
 
 import asyncio
-import json
 import logging
 
 from fastapi import WebSocket, WebSocketDisconnect

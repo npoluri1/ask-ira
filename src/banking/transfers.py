@@ -1,6 +1,5 @@
 import time
 import uuid
-from typing import Any
 
 from .accounts import AccountsEngine
 

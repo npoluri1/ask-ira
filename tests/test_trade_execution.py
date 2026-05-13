@@ -1,5 +1,11 @@
 import pytest
-from src.trade_execution import execute_trade, calculate_position_size, get_balance, get_trade_history
+
+from src.trade_execution import (
+    calculate_position_size,
+    execute_trade,
+    get_balance,
+    get_trade_history,
+)
 
 
 @pytest.mark.asyncio

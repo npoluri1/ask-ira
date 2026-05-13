@@ -1,9 +1,8 @@
-import pytest
 from src.portfolio import (
     calculate_portfolio,
-    rebalance_portfolio,
     get_diversification_score,
     get_user_holdings,
+    rebalance_portfolio,
 )
 
 RISK_PROFILES = {
