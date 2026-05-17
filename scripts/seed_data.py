@@ -101,6 +101,7 @@ def seed_vector_store(vs: VectorStore, docs: list[Document], clear_first: bool =
         except Exception:
             pass
         from langchain_chroma import Chroma
+
         from src.rag.embeddings import get_embedding_model
         vs.store = Chroma(
             collection_name="ask_ira_docs",

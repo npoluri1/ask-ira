@@ -34,3 +34,15 @@ class VectorStore:
 
     def max_marginal_relevance_search(self, query: str, k: int = 5, fetch_k: int = 20):
         return self.store.max_marginal_relevance_search(query, k=k, fetch_k=fetch_k)
+
+    def count(self) -> int:
+        """Returns the number of documents in the collection."""
+        try:
+            # For langchain-chroma
+            if hasattr(self.store, "_collection"):
+                return self.store._collection.count()
+            # Fallback
+            res = self.store.get()
+            return len(res["ids"]) if res and "ids" in res else 0
+        except Exception:
+            return 0

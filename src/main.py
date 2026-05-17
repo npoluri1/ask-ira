@@ -90,6 +90,21 @@ async def lifespan(app: FastAPI):
     logger.info("Agent Platform: %d agent types registered", len(__import__("src.agent_platform", fromlist=["AGENT_REGISTRY"]).AGENT_REGISTRY))
     logger.info("Compliance Router: 20+ country jurisdictions loaded")
 
+    # Auto-seed vector store if empty
+    try:
+        from src.rag.vector_store import VectorStore
+        vs = VectorStore()
+        if vs.count() == 0:
+            logger.info("Vector store is empty, auto-seeding sample data...")
+            from scripts.seed_data import build_documents, seed_vector_store
+            docs = build_documents()
+            count = seed_vector_store(vs, docs, clear_first=False)
+            logger.info("Auto-seeded %d documents into ChromaDB", count)
+        else:
+            logger.info("Vector store already contains %d documents", vs.count())
+    except Exception as e:
+        logger.warning("Auto-seeding skipped: %s", e)
+
     yield
 
     logger.info("Ask IRA shutting down...")
