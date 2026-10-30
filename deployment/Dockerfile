@@ -1,5 +1,5 @@
 # Stage 1: Build
-FROM python:3.11-slim AS builder
+FROM python:3.14-slim AS builder
 
 WORKDIR /build
 
@@ -16,7 +16,7 @@ RUN pip install --no-cache-dir --prefix=/install \
     ".[groq,gemini,ollama,huggingface,mistral,mcp,eval]"
 
 # Stage 2: Runtime
-FROM python:3.11-slim
+FROM python:3.14-slim
 
 WORKDIR /app
 
